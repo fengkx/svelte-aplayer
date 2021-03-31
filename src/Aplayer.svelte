@@ -5,7 +5,8 @@
   import { volumeEventHandlers } from "./lib/volume-handler";
   import { progressEventHandlers } from "./lib/progress-handlers";
   import { onMount } from "svelte";
-  import { propsBool } from "./lib/utils";
+  import { propsBool, isMobile } from "./lib/utils";
+
   import {
     soundUnmuted,
     soundMuted,
@@ -181,6 +182,7 @@
   class:aplayer-withlrc={$lrc.length > 0}
   class:aplayer-withlist={$playList.audio.length > 1}
   class:aplayer-narrow={mini}
+  class:aplayer-mobile={isMobile}
 >
   <div class="aplayer-body ">
     <div
@@ -771,6 +773,11 @@
       .aplayer-body {
         height: var(--aplayer-height);
         width: var(--aplayer-height);
+      }
+    }
+    &.aplayer-mobile {
+      .aplayer-icon-volume-down {
+        display: none;
       }
     }
   }

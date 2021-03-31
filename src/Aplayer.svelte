@@ -1,111 +1,141 @@
+<svelte:options tag="s-aplayer" />
+
 <script lang="ts">
-  import {playList, currentSong, rdTime, currentTime,duration, rdBufTime, wtBufTime, loading, lrc, controlState, volumeState, wtPlayerState} from './lib/store';
-  import {volumeEventHandlers} from './lib/volume-handler'
-  import {progressEventHandlers} from './lib/progress-handlers'
-  import {onMount} from "svelte";
-  import {propsBool} from './lib/utils'
-  export let audio: any[]|string;
+  import { createStore, instances } from "./lib/store";
+  import { volumeEventHandlers } from "./lib/volume-handler";
+  import { progressEventHandlers } from "./lib/progress-handlers";
+  import { onMount } from "svelte";
+  import { propsBool } from "./lib/utils";
+  import {
+    soundUnmuted,
+    soundMuted,
+    randomOrder,
+    loadingIcon,
+    listOrder,
+    loopOne,
+    loopAll,
+    loopNone,
+  } from "./assets/svg";
+
+  const {
+    player,
+    playList,
+    currentSong,
+    rdTime,
+    currentTime,
+    duration,
+    rdBufTime,
+    wtBufTime,
+    loading,
+    lrc,
+    controlState,
+    volumeState,
+  } = createStore();
+  export let audio: any[] | string;
   export let order = $controlState.order;
   export let loop = $controlState.loop;
   export let volume = $controlState.volume;
+  export let mini = false;
+  export let mutex = true;
+  export let autoplay = false;
+  export let theme: string;
 
-  $controlState.showList = $playList.audio.length > 1 && !propsBool($$props, 'list_folded');
-  const parsedAudio = typeof audio === 'string' ? JSON.parse(audio): audio;
-  $playList.audio = Array.isArray(parsedAudio) ? parsedAudio : [parsedAudio];
-
-  let playerListHeight = 0;
-  $: playerListHeight = playListElement?.scrollHeight ?? 0;
-
+  let playLock = !autoplay;
+  $: parsedAudio = typeof audio === "string" ? JSON.parse(audio) : audio;
+  $: $playList.audio = Array.isArray(parsedAudio) ? parsedAudio : [parsedAudio];
+  $: initShowList =
+    !propsBool($$props, "list_folded") && $playList.audio.length > 1;
+  $: $controlState.showList = initShowList;
+  $: $controlState.loop = loop;
+  $: $controlState.order = order;
+  $: $controlState.volume = volume;
+  $: player.volume = volume;
+  $: player.src = $currentSong.url;
+  $: themeColor = $currentSong.theme ?? theme ?? "#fadfa3";
   $: {
-    $controlState.loop = loop;
-    $controlState.order = order;
-    $controlState.volume = volume;
-    const parsedAudio = typeof audio === 'string' ? JSON.parse(audio): audio;
-    $playList.audio = parsedAudio;
+    if (rootEl) {
+      rootEl.style.setProperty("--theme-color", themeColor);
+    }
   }
-  const player = document.createElement('audio');
+  const play = () => {
+    if (mutex) {
+      console.log(instances);
+      instances.forEach((audio) => audio.pause());
+    }
+    player.play();
+  };
   $: {
-    console.log('setting')
-    player.src = $currentSong.url;
+    if (!playLock) {
+      play();
+    }
+    playLock = false;
   }
 
-  $: mode = ($lrc && $lrc.length > 0) ? 'withlrc' : '';
+  $: mode = $lrc && $lrc.length > 0 ? "withlrc" : "";
   let lrcActiveIndex = -1;
 
-  const startPlay = (time?: number) => {
-    $wtPlayerState.playing = true;
-    if(time) {
-      player.currentTime = time;
-    }
-    return player.play();
-  }
-  const pause = () => {
-    $wtPlayerState.playing = false;
-    return player.pause();
-  }
-  $: togglePlay = $wtPlayerState.playing ? pause : () => startPlay();
-
-  player.addEventListener('timeupdate', () => {
-    $currentTime = player.currentTime
-    if(mode.includes('lrc')) {
-      if((lrcActiveIndex+1)< $lrc.length &&player.currentTime >= $lrc[lrcActiveIndex+1][0]) {
+  player.addEventListener("timeupdate", () => {
+    $currentTime = player.currentTime;
+    if (mode.includes("lrc")) {
+      if (
+        lrcActiveIndex + 1 < $lrc.length &&
+        player.currentTime >= $lrc[lrcActiveIndex + 1][0]
+      ) {
         lrcActiveIndex++;
       }
     }
-  })
-  player.addEventListener('volumechange', () => {
-    $controlState.volume = player.volume;
-  })
-  player.addEventListener('loadedmetadata', () => {
-    $duration = player.duration;
-  })
-  player.addEventListener('progress', () => {
-    const bufTime = player.buffered.length ? player.buffered.end(player.buffered.length - 1) : 0;
-    $wtBufTime = bufTime;
-  })
-  player.addEventListener('canplay', () => {
-    const bufTime = player.buffered.length ? player.buffered.end(player.buffered.length - 1) : 0;
-    $wtBufTime = bufTime;
-  })
-  player.addEventListener('durationchange', () => {
-    $duration = player.duration;
-  })
-  player.addEventListener('ended', () => {
-    const audios = Array.isArray($playList.audio) ? $playList.audio : [$playList.audio];
-    const nextIdx = ($playList.playingIndex + 1) % audios.length;
-    if ($controlState.loop === 'none') {
-      if ($controlState.order === 'list') {
-        if ($playList.playingIndex < audios.length - 1) {
-          $playList.playingIndex = nextIdx
-          startPlay(0)
-        } else {
-          $playList.playingIndex = ($playList.playingIndex + 1) % audios.length
-          pause()
-        }
-      } else if ($controlState.order === 'random') {
-              const randomIdx = Math.floor(audios.length * Math.random());
-              if(randomIdx === $playList.playingIndex) {
-                $playList.playingIndex =nextIdx
-              } else {
-                $playList.playingIndex = randomIdx;
-              }
-              startPlay(0);
-      }
-    } else if ($controlState.loop === 'one') {
-      startPlay(0)
-    } else if ($controlState.loop === 'all') {
-      $playList.playingIndex = nextIdx;
-      startPlay();
-    }
   });
-
-  const checkReadyState = () => {
-    if(player.readyState !== $wtPlayerState.readyState) {
-      $wtPlayerState.readyState = player.readyState
+  player.addEventListener("volumechange", () => {
+    $controlState.volume = player.volume;
+  });
+  player.addEventListener("loadedmetadata", () => {
+    $duration = player.duration;
+  });
+  const setBufTime = () => {
+    const bufTime = player.buffered.length
+      ? player.buffered.end(player.buffered.length - 1)
+      : 0;
+    $wtBufTime = bufTime;
+  };
+  player.addEventListener("progress", setBufTime);
+  player.addEventListener("canplay", setBufTime);
+  player.addEventListener("durationchange", () => {
+    $duration = player.duration;
+  });
+  const jumpNext = () => {
+    const audios = Array.isArray($playList.audio)
+      ? $playList.audio
+      : [$playList.audio];
+    const nextIdx = ($playList.playingIndex + 1) % audios.length;
+    if ($controlState.loop === "none") {
+      if ($controlState.order === "list") {
+        if ($playList.playingIndex < audios.length - 1) {
+          $playList.playingIndex = nextIdx;
+          player.currentTime = 0;
+          play();
+        } else {
+          $playList.playingIndex = ($playList.playingIndex + 1) % audios.length;
+          playLock = true;
+          player.pause();
+        }
+      } else if ($controlState.order === "random") {
+        const randomIdx = Math.floor(audios.length * Math.random());
+        if (randomIdx === $playList.playingIndex) {
+          $playList.playingIndex = nextIdx;
+        } else {
+          $playList.playingIndex = randomIdx;
+        }
+        player.currentTime = 0;
+      }
+    } else if ($controlState.loop === "one") {
+      player.currentTime = 0;
+      play();
+    } else if ($controlState.loop === "all") {
+      $playList.playingIndex = nextIdx;
+      play();
     }
-    setTimeout(checkReadyState, 200);
-  }
-  checkReadyState();
+  };
+  player.addEventListener("ended", jumpNext);
 
   let volumeBar: HTMLElement;
   let playedBar: HTMLElement;
@@ -113,8 +143,12 @@
   let progressDragStart, progressDragMove, progressDragEnd;
 
   let playListElement: HTMLElement;
+  let playerListHeight = 0;
+  $: playerListHeight = playListElement?.scrollHeight ?? 0;
+
+  let rootEl: HTMLElement;
   onMount(() => {
-    window.theAudio = player;
+    if (location.hostname === "localhost") window.theAudio = player;
     const volumeHandlers = volumeEventHandlers(player, volumeBar);
     volumeDragStart = volumeHandlers.volumeDragStart;
     volumeDragMove = volumeHandlers.volumeDragMove;
@@ -123,20 +157,45 @@
     progressDragStart = progressHandlers.progressDragStart;
     progressDragMove = progressHandlers.progressDragMove;
     progressDragEnd = progressHandlers.progressDragEnd;
-  })
+  });
 </script>
 
-<svelte:options tag="s-aplayer" />
-<div class="aplayer" class:aplayer-withlrc={$lrc.length > 0} class:aplayer-withlist={$playList.audio.length > 1}>
+<div
+  bind:this={rootEl}
+  class="aplayer"
+  class:aplayer-withlrc={$lrc.length > 0}
+  class:aplayer-withlist={$playList.audio.length > 1}
+  class:aplayer-narrow={mini}
+>
   <div class="aplayer-body ">
-    <div class="aplayer-pic" style="background-image: url( {$currentSong.cover} )" on:click={togglePlay} >
-      {#if $wtPlayerState.playing}
+    <div
+      class="aplayer-pic"
+      style="background-image: url( {$currentSong.cover} )"
+      on:click={() => {
+        player.paused ? play() : player.pause();
+      }}
+    >
+      {#if !player.paused}
         <div class="aplayer-button aplayer-pause">
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 17 32"><path d="M14.080 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048zM2.88 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048z"></path></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            viewBox="0 0 17 32"
+            ><path
+              d="M14.080 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048zM2.88 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048z"
+            /></svg
+          >
         </div>
-      {:else }
+      {:else}
         <div class="aplayer-button aplayer-play">
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 16 31"><path d="M15.552 15.168q0.448 0.32 0.448 0.832 0 0.448-0.448 0.768l-13.696 8.512q-0.768 0.512-1.312 0.192t-0.544-1.28v-16.448q0-0.96 0.544-1.28t1.312 0.192z"></path></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            version="1.1"
+            viewBox="0 0 16 31"
+            ><path
+              d="M15.552 15.168q0.448 0.32 0.448 0.832 0 0.448-0.448 0.768l-13.696 8.512q-0.768 0.512-1.312 0.192t-0.544-1.28v-16.448q0-0.96 0.544-1.28t1.312 0.192z"
+            /></svg
+          >
         </div>
       {/if}
     </div>
@@ -148,32 +207,44 @@
       </div>
 
       {#if $currentSong.lrc}
-      <div class="aplayer-lrc">
-        <div class="aplayer-lrc-contents" style="transform: translateY({Math.max(lrcActiveIndex, 0) * -16}px);">
-          {#each $lrc as line, index (line[0])}
-            <p class:aplayer-lrc-current={index === lrcActiveIndex}>{line[1]}</p>
-          {/each}
+        <div class="aplayer-lrc">
+          <div
+            class="aplayer-lrc-contents"
+            style="transform: translateY({Math.max(lrcActiveIndex, 0) *
+              -16}px);"
+          >
+            {#each $lrc as line, index (line[0])}
+              <p class:aplayer-lrc-current={index === lrcActiveIndex}>
+                {line[1]}
+              </p>
+            {/each}
+          </div>
         </div>
-      </div>
       {/if}
       <div class="aplayer-controller">
         <div
-                class="aplayer-bar-wrap"
-                bind:this={playedBar}
-                on:mousedown={progressDragStart}
-                on:mousemove={progressDragMove}
-                on:mouseup={progressDragEnd}
-                on:mouseleave={progressDragEnd}
-                on:touchstart={progressDragStart}
-                on:touchmove={progressDragMove}
-                on:touchend={progressDragEnd}
+          class="aplayer-bar-wrap"
+          bind:this={playedBar}
+          on:mousedown={progressDragStart}
+          on:mousemove={progressDragMove}
+          on:mouseup={progressDragEnd}
+          on:mouseleave={progressDragEnd}
+          on:touchstart={progressDragStart}
+          on:touchmove={progressDragMove}
+          on:touchend={progressDragEnd}
         >
           <div class="aplayer-bar">
-            <div class="aplayer-loaded" style="width: {$rdBufTime.bufferPercentage}"></div>
+            <div
+              class="aplayer-loaded"
+              style="width: {$rdBufTime.bufferPercentage}"
+            />
             <div class="aplayer-played" style="width: {$rdTime.playPercentage}">
               <div class="aplayer-thumb">
-                <span class="aplayer-loading-icon" style="display: {$loading ? 'inline': 'none'}">
-                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 32 32"><path d="M4 16c0-6.6 5.4-12 12-12s12 5.4 12 12c0 1.2-0.8 2-2 2s-2-0.8-2-2c0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8c1.2 0 2 0.8 2 2s-0.8 2-2 2c-6.6 0-12-5.4-12-12z"></path></svg>
+                <span
+                  class="aplayer-loading-icon"
+                  style="display: {$loading ? 'inline' : 'none'}"
+                >
+                  {@html loadingIcon}
                 </span>
               </div>
             </div>
@@ -181,74 +252,121 @@
         </div>
         <div class="aplayer-time">
           <span class="aplayer-time-inner">
-            <span class="aplayer-ptime">{$rdTime.ptime}</span> / <span class="aplayer-dtime">{$rdTime.duration}</span>
+            <span class="aplayer-ptime">{$rdTime.ptime}</span> /
+            <span class="aplayer-dtime">{$rdTime.duration}</span>
           </span>
 
-
-          <span hidden></span>
+          <span hidden />
           <div class="aplayer-volume-wrap">
-            <button type="button" class="aplayer-icon aplayer-icon-volume-down" on:click={player.muted = !player.muted}>
+            <button
+              type="button"
+              class="aplayer-icon aplayer-icon-volume-down"
+              on:click|capture={() => {
+                player.muted = !player.muted;
+              }}
+            >
               {#if $volumeState.muted || player.muted}
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 28 32"><path d="M13.728 6.272v19.456q0 0.448-0.352 0.8t-0.8 0.32-0.8-0.32l-5.952-5.952h-4.672q-0.48 0-0.8-0.352t-0.352-0.8v-6.848q0-0.48 0.352-0.8t0.8-0.352h4.672l5.952-5.952q0.32-0.32 0.8-0.32t0.8 0.32 0.352 0.8z"></path></svg>
-              {:else }
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 28 32"><path d="M13.728 6.272v19.456q0 0.448-0.352 0.8t-0.8 0.32-0.8-0.32l-5.952-5.952h-4.672q-0.48 0-0.8-0.352t-0.352-0.8v-6.848q0-0.48 0.352-0.8t0.8-0.352h4.672l5.952-5.952q0.32-0.32 0.8-0.32t0.8 0.32 0.352 0.8zM20.576 16q0 1.344-0.768 2.528t-2.016 1.664q-0.16 0.096-0.448 0.096-0.448 0-0.8-0.32t-0.32-0.832q0-0.384 0.192-0.64t0.544-0.448 0.608-0.384 0.512-0.64 0.192-1.024-0.192-1.024-0.512-0.64-0.608-0.384-0.544-0.448-0.192-0.64q0-0.48 0.32-0.832t0.8-0.32q0.288 0 0.448 0.096 1.248 0.48 2.016 1.664t0.768 2.528z"></path></svg>
+                {@html soundMuted}
+              {:else}
+                {@html soundUnmuted}
               {/if}
             </button>
             <div
-                    class="aplayer-volume-bar-wrap"
-                    on:mousedown={volumeDragStart}
-                    on:mousemove={volumeDragMove}
-                    on:mouseup={volumeDragEnd}
-                    on:mouseleave={volumeDragEnd}
-                    on:touchstart={volumeDragStart}
-                    on:touchmove={volumeDragMove}
-                    on:touchend={volumeDragEnd}
+              class="aplayer-volume-bar-wrap"
+              on:mousedown={volumeDragStart}
+              on:mousemove={volumeDragMove}
+              on:mouseup={volumeDragEnd}
+              on:mouseleave={volumeDragEnd}
+              on:touchstart={volumeDragStart}
+              on:touchmove={volumeDragMove}
+              on:touchend={volumeDragEnd}
             >
               <div class="aplayer-volume-bar" bind:this={volumeBar}>
-                <div class="aplayer-volume" style="height: {player.muted ? '0px' : $volumeState.volumePercentage}"></div>
+                <div
+                  class="aplayer-volume"
+                  style="height: {player.muted
+                    ? '0px'
+                    : $volumeState.volumePercentage}"
+                />
               </div>
             </div>
           </div>
-          <button type="button" class="aplayer-icon aplayer-icon-order" on:click={() => {$controlState.order = $controlState.order === 'list' ? 'random' : 'list'}}>
-            {#if $controlState.order === 'random'}
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 32 32"><path d="M22.667 4l7 6-7 6 7 6-7 6v-4h-3.653l-3.76-3.76 2.827-2.827 2.587 2.587h2v-8h-2l-12 12h-6v-4h4.347l12-12h3.653v-4zM2.667 8h6l3.76 3.76-2.827 2.827-2.587-2.587h-4.347v-4z"></path></svg>
-            {:else }
-              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 32 32"><path d="M0.622 18.334h19.54v7.55l11.052-9.412-11.052-9.413v7.549h-19.54v3.725z"></path></svg>
+          <button
+            type="button"
+            class="aplayer-icon aplayer-icon-order"
+            on:click={() => {
+              $controlState.order =
+                $controlState.order === "list" ? "random" : "list";
+            }}
+          >
+            {#if $controlState.order === "random"}
+              {@html randomOrder}
+            {:else}
+              {@html listOrder}
             {/if}
           </button>
-          <button type="button" class="aplayer-icon aplayer-icon-loop" on:click={() => {
-            if($controlState.loop === 'all') {$controlState.loop = 'one'}
-            else if($controlState.loop === 'one') {$controlState.loop = 'none'}
-            else if($controlState.loop === 'none') {$controlState.loop = 'all'}
-          }}>
-            {#if $controlState.loop === 'none' }
-              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 29 32"><path d="M2.667 7.027l1.707-1.693 22.293 22.293-1.693 1.707-4-4h-11.64v4l-5.333-5.333 5.333-5.333v4h8.973l-8.973-8.973v0.973h-2.667v-3.64l-4-4zM22.667 17.333h2.667v5.573l-2.667-2.667v-2.907zM22.667 6.667v-4l5.333 5.333-5.333 5.333v-4h-10.907l-2.667-2.667h13.573z"></path></svg>
-              {:else if $controlState.loop === 'one' }
-              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 33 32"><path d="M9.333 9.333h13.333v4l5.333-5.333-5.333-5.333v4h-16v8h2.667v-5.333zM22.667 22.667h-13.333v-4l-5.333 5.333 5.333 5.333v-4h16v-8h-2.667v5.333zM17.333 20v-8h-1.333l-2.667 1.333v1.333h2v5.333h2z"></path></svg>
-              {:else if $controlState.loop === 'all'}
-              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 29 32"><path d="M9.333 9.333h13.333v4l5.333-5.333-5.333-5.333v4h-16v8h2.667v-5.333zM22.667 22.667h-13.333v-4l-5.333 5.333 5.333 5.333v-4h16v-8h-2.667v5.333z"></path></svg>
-              {/if}
+          <button
+            type="button"
+            class="aplayer-icon aplayer-icon-loop"
+            on:click={() => {
+              if ($controlState.loop === "all") {
+                $controlState.loop = "one";
+              } else if ($controlState.loop === "one") {
+                $controlState.loop = "none";
+              } else if ($controlState.loop === "none") {
+                $controlState.loop = "all";
+              }
+            }}
+          >
+            {#if $controlState.loop === "none"}
+              {@html loopNone}
+            {:else if $controlState.loop === "one"}
+              {@html loopOne}
+            {:else if $controlState.loop === "all"}
+              {@html loopAll}
+            {/if}
           </button>
 
-          <button type="button" class="aplayer-icon aplayer-icon-menu" on:click={() => {$controlState.showList = !$controlState.showList}}>
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 22 32"><path d="M20.8 14.4q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2zM1.6 11.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2zM20.8 20.8q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2z"></path></svg>
-          </button>
+          {#if $playList.audio.length > 1}
+            <button
+              type="button"
+              class="aplayer-icon aplayer-icon-menu"
+              on:click={() => {
+                $controlState.showList = !$controlState.showList;
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                version="1.1"
+                viewBox="0 0 22 32"
+                ><path
+                  d="M20.8 14.4q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2zM1.6 11.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2zM20.8 20.8q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2z"
+                /></svg
+              >
+            </button>
+          {/if}
         </div>
       </div>
     </div>
 
-    <div class="aplayer-miniswitcher"></div>
-    <div class="aplayer-list" style="height: {$controlState.showList ? `${playerListHeight}px` : '0px'}" bind:this={playListElement}>
+    <!--    <div class="aplayer-miniswitcher" />-->
+    <div
+      class="aplayer-list"
+      style="height: {$controlState.showList ? `${playerListHeight}px` : '0px'}"
+      bind:this={playListElement}
+    >
       <ol>
         {#each $playList.audio as song, idx}
-          <li on:click={() => {
-            $playList.playingIndex = idx;
-            startPlay(0);
-          }}>
+          <li
+            on:click={() => {
+              $playList.playingIndex = idx;
+              player.currentTime = 0;
+            }}
+          >
             {#if idx === $playList.playingIndex}
-              <span class="aplayer-list-cur"></span>
+              <span class="aplayer-list-cur" />
             {/if}
-            <span class="aplayer-list-index">{idx+1}</span>
+            <span class="aplayer-list-index">{idx + 1}</span>
             <span class="aplayer-list-title">{song.name}</span>
             <span class="aplayer-list-artist">{song.artist}</span>
           </li>
@@ -263,10 +381,11 @@
     --aplayer-height: 66px;
     --lrc-height: 30px;
     --aplayer-height-lrc: calc(var(--aplayer-height) + var(--lrc-height) - 6px);
+    --theme-color: #fadfa3;
     position: relative;
     background: #fff;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.07), 0 1px 5px 0 rgba(0, 0, 0, 0.1);
-    font-family: Arial,Helvetica,sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     margin: 5px;
     overflow: hidden;
     border-radius: 2px;
@@ -289,7 +408,7 @@
       background-color: transparent;
       outline: none;
       cursor: pointer;
-      opacity: .8;
+      opacity: 0.8;
       vertical-align: middle;
       padding: 0;
       font-size: 12px;
@@ -297,7 +416,7 @@
       display: inline-block;
 
       path {
-        transition: all .2s ease-in-out;
+        transition: all 0.2s ease-in-out;
       }
     }
 
@@ -312,7 +431,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: all .3s ease;
+      transition: all 0.3s ease;
       cursor: pointer;
 
       &:hover .aplayer-button {
@@ -321,12 +440,11 @@
       .aplayer-button {
         position: absolute;
         border-radius: 50%;
-        opacity: .8;
-        text-shadow: 0 1px 1px rgba(0,0,0,.2);
-        box-shadow: 0 1px 1px rgba(0,0,0,.2);
-        background: rgba(0,0,0,.2);
-        transition: all .1s ease;
-
+        opacity: 0.8;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        transition: all 0.1s ease;
       }
       .aplayer-play {
         width: 26px;
@@ -413,7 +531,7 @@
               top: 0;
               bottom: 0;
               height: 2px;
-              background: #FADFA3 none repeat scroll 0 0;
+              background: var(--theme-color) none repeat scroll 0 0;
 
               .aplayer-thumb {
                 position: absolute;
@@ -425,8 +543,8 @@
                 width: 10px;
                 border-radius: 50%;
                 cursor: pointer;
-                transition: all .3s ease-in-out;
-                background: #FADFA3 none repeat scroll 0 0;
+                transition: all 0.3s ease-in-out;
+                background: var(--theme-color) none repeat scroll 0 0;
                 transform: scale(0);
               }
             }
@@ -454,7 +572,7 @@
           }
           .aplayer-icon {
             cursor: pointer;
-            transition: all .2s ease;
+            transition: all 0.2s ease;
             path {
               fill: #666;
             }
@@ -478,7 +596,7 @@
             height: 0;
             z-index: 99;
             overflow: hidden;
-            transition: all .2s ease-in-out;
+            transition: all 0.2s ease-in-out;
 
             .aplayer-volume-bar {
               position: absolute;
@@ -490,12 +608,12 @@
               border-radius: 2.5px;
               overflow: hidden;
               .aplayer-volume {
-                background: #FADFA3 none repeat scroll 0 0;
+                background: var(--theme-color) none repeat scroll 0 0;
                 position: absolute;
                 bottom: 0;
                 right: 0;
                 width: 5px;
-                transition: all .1s ease;
+                transition: all 0.1s ease;
               }
             }
           }
@@ -533,7 +651,7 @@
       }
 
       .aplayer-lrc-contents {
-        transition: all .5s ease-out;
+        transition: all 0.5s ease-out;
         width: 100%;
         user-select: text;
         cursor: default;
@@ -591,7 +709,7 @@
           left: 0;
           top: 5px;
           cursor: pointer;
-          background-color: #FADFA3;
+          background-color: var(--theme-color);
         }
         .aplayer-list-index {
           color: #666;
@@ -625,18 +743,37 @@
         display: block;
       }
     }
+    &.aplayer-narrow {
+      width: var(--aplayer-height);
+
+      .aplayer-info {
+        display: none;
+      }
+      .aplayer-list {
+        display: none;
+      }
+      .aplayer-pic,
+      .aplayer-body {
+        height: var(--aplayer-height);
+        width: var(--aplayer-height);
+      }
+    }
   }
   @keyframes aplayer-roll {
-    0%{left:0}
-    100%{left: -100%}
+    0% {
+      left: 0;
+    }
+    100% {
+      left: -100%;
+    }
   }
 
   @keyframes rotate {
     0% {
-      transform: rotate(0)
+      transform: rotate(0);
     }
     100% {
-      transform: rotate(360deg)
+      transform: rotate(360deg);
     }
   }
 </style>

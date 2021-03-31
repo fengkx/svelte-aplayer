@@ -19,6 +19,11 @@
         width: 600px;
         max-width: 100%;
         margin: 20px 0 40px;
+        display: flex;
+        flex-direction: column;
+        min-height: 700px;
+        height: 80vh;
+        justify-content: space-evenly;
       }
     </style>
   </head>
@@ -26,36 +31,85 @@
     <div id="app">
       <div class="aplayer-wrap">
         <s-aplayer
-                list_folded
-                loop="none"
-                order="random"
                 audio='[
-                {"name": "光るなら",
-                "artist": "Goose house",
-                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
-                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
-                "cover": "https://fengkx.top/images/avatar.jpg"
-                },
-                {"name": "光るなら2",
-                "artist": "Goose house",
-                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
-                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
-                "cover": "https://fengkx.top/images/avatar.jpg"
-                },
-                {"name": "光るなら3",
-                "artist": "Goose house",
-                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
-                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
-                "cover": "https://fengkx.top/images/avatar.jpg"
-                },
-                {"name": "光るなら4",
-                "artist": "Goose house",
-                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
-                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
-                "cover": "https://fengkx.top/images/avatar.jpg"
-                }
-                ]'
-        />
+  {"name": "光るなら",
+    "artist": "Goose house",
+    "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/hikarunara.jpg"
+  },
+  {"name": "神奇的糊塗魔藥",
+    "artist": "林家謙",
+    "url": "http://localhost:5000/svelte-aplayer/margic-sillines.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/margic-silliness.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/margic-sillines.jpg"
+  },
+  {"name": "君の知らない物語",
+    "artist": "supercell",
+    "url": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.jpg"
+  },
+  {"name": "「戦場ヶ原、蕩れ」",
+    "artist": "神前暁",
+    "url": "http://localhost:5000/svelte-aplayer/senjougahara.mp3",
+    "cover": "http://localhost:5000/svelte-aplayer/senjougahara.jpg"
+  }
+]'
+        ></s-aplayer>
+
+        <s-aplayer
+                list_folded="true"
+                audio='[
+  {"name": "神奇的糊塗魔藥",
+    "artist": "林家謙",
+    "url": "http://localhost:5000/svelte-aplayer/margic-sillines.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/margic-silliness.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/margic-sillines.jpg"
+  },
+  {"name": "君の知らない物語",
+    "artist": "supercell",
+    "url": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.jpg"
+  },
+  {"name": "「戦場ヶ原、蕩れ」",
+    "artist": "神前暁",
+    "url": "http://localhost:5000/svelte-aplayer/senjougahara.mp3",
+    "cover": "http://localhost:5000/svelte-aplayer/senjougahara.jpg"
+  }
+]'></s-aplayer>
+        <s-aplayer
+                list_folded="true"
+                audio='[
+  {"name": "「戦場ヶ原、蕩れ」",
+    "artist": "神前暁",
+    "url": "http://localhost:5000/svelte-aplayer/senjougahara.mp3",
+    "cover": "http://localhost:5000/svelte-aplayer/senjougahara.jpg"
+  },
+  {"name": "神奇的糊塗魔藥",
+    "artist": "林家謙",
+    "url": "http://localhost:5000/svelte-aplayer/margic-sillines.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/margic-silliness.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/margic-sillines.jpg"
+  },
+  {"name": "君の知らない物語",
+    "artist": "supercell",
+    "url": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.jpg"
+  }
+]'></s-aplayer>
+        <s-aplayer
+                list_folded="true"
+                mini="true"
+                audio='{
+    "name": "君の知らない物語",
+    "artist": "supercell",
+    "url": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.mp3",
+    "lrc": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.lrc",
+    "cover": "http://localhost:5000/svelte-aplayer/bakemonogatari-ed.jpg"
+  }'></s-aplayer>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

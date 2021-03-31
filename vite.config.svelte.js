@@ -8,11 +8,11 @@ const customElement =
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    outDir: path.resolve(__dirname, "dist", "wc"),
+    outDir: path.resolve(__dirname, "dist", "svelte"),
     lib: {
       entry: path.resolve(__dirname, "src/main.ts"),
       name: "Aplayer",
     },
   },
-  plugins: [svelte(), image({})],
+  plugins: [svelte(), image()],
 });

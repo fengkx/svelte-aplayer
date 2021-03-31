@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Svelte + TS + Vite App</title>
+    <style>
+      #app {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 60rem;
+        min-height: 100vh;
+        text-align: center;
+        margin: auto;
+      }
+      .aplayer-wrap {
+        width: 600px;
+        max-width: 100%;
+        margin: 20px 0 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="aplayer-wrap">
+        <s-aplayer
+                list_folded
+                loop="none"
+                order="random"
+                audio='[
+                {"name": "光るなら",
+                "artist": "Goose house",
+                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
+                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
+                "cover": "https://fengkx.top/images/avatar.jpg"
+                },
+                {"name": "光るなら2",
+                "artist": "Goose house",
+                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
+                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
+                "cover": "https://fengkx.top/images/avatar.jpg"
+                },
+                {"name": "光るなら3",
+                "artist": "Goose house",
+                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
+                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
+                "cover": "https://fengkx.top/images/avatar.jpg"
+                },
+                {"name": "光るなら4",
+                "artist": "Goose house",
+                "url": "http://localhost:5000/svelte-aplayer/hikarunara.mp3",
+                "lrc": "http://localhost:5000/svelte-aplayer/hikarunara.lrc",
+                "cover": "https://fengkx.top/images/avatar.jpg"
+                }
+                ]'
+        />
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

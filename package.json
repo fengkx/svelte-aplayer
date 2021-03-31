@@ -9,6 +9,11 @@
     "format": "prettier -w **/*.{svelte,ts,js}",
     "serve": "vite preview"
   },
+  "browser": "dist/",
+  "homepage": "https://github.com/fengkx/svelte-aplayer",
+  "files": [
+    "dist/**/*"
+  ],
   "devDependencies": {
     "@rollup/plugin-image": "^2.0.6",
     "@sveltejs/vite-plugin-svelte": "next",

@@ -63,9 +63,12 @@
       console.log(instances);
       instances.forEach((audio) => audio.pause());
     }
-    player.play();
+    player.play().catch(err => {
+      console.error(err)
+    });
   };
   $: {
+    player.src // add as dependency
     if (!playLock) {
       play();
     }
@@ -128,7 +131,6 @@
         if ($playList.playingIndex < audios.length - 1) {
           $playList.playingIndex = nextIdx;
           player.currentTime = 0;
-          play();
         } else {
           $playList.playingIndex = ($playList.playingIndex + 1) % audios.length;
           playLock = true;
@@ -145,10 +147,8 @@
       }
     } else if ($controlState.loop === "one") {
       player.currentTime = 0;
-      play();
     } else if ($controlState.loop === "all") {
       $playList.playingIndex = nextIdx;
-      play();
     }
   };
   player.addEventListener("ended", jumpNext);

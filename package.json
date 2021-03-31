@@ -6,7 +6,7 @@
     "build": "npm run build:wc && npm run build:svelte",
     "build:wc": "cross-env CUSTOM_ELEMENT=1 vite build",
     "build:svelte": "cross-env CUSTOM_ELEMENT=0 vite build -c vite.config.svelte.js",
-    "format": "prettier -w **/*.{svelte,ts,js}",
+    "format": "prettier -w **/*.{svelte,ts,js,html,md}",
     "serve": "vite preview"
   },
   "browser": "dist/wc/svelte-aplayer.umd.js",

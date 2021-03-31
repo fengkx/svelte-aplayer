@@ -91,6 +91,21 @@
   player.addEventListener("loadedmetadata", () => {
     $duration = player.duration;
   });
+  let skipTime;
+  player.addEventListener("error", () => {
+    console.warn(
+      "An audio error has occurred, player will skip forward in 2 seconds."
+    );
+    if ($playList.audio.length > 1) {
+      skipTime = setTimeout(() => {
+        $playList.playingIndex =
+          ($playList.playingIndex + 1) % $playList.audio.length;
+        if (!this.paused) {
+          play();
+        }
+      }, 2000);
+    }
+  });
   const setBufTime = () => {
     const bufTime = player.buffered.length
       ? player.buffered.end(player.buffered.length - 1)

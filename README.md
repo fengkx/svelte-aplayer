@@ -1,50 +1,39 @@
-# Svelte + TS + Vite
+<h1 align="center">Svelte APlayer</h1>
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+> Aplayer port in Svelte with Custom element (WebComponent) build
 
-## Recommended IDE Setup
+## Introduction
 
-[VSCode](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+This is a [Aplayer](https://github.com/DIYgod/APlayer) port in [Svelte](https://svelte.dev/).
 
-## Need an official Svelte framework?
+Thanks to Svelte, It is **framework agnostic** and no **runtime required** with prebuild custom element bundle.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+It should be a good alternative to `hexo-tag-aplayer` as well as any environment in which you can customise your HTML by using custom element.
 
-## Technical considerations
+Drawback: Due to the limitaion of custom element, Instead of use object in the props of custom element, You need to pass a **strict json string**. And all props are snake case style naming.
 
-**Why use this over SvelteKit?**
+## Usage
 
-- SvelteKit is still a work-in-progress.
-- It currently does not support the pure-SPA use case.
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-  `vite dev` and `vite build` wouldn't work in a SvelteKit environment, for example.
+[Example](custom element)
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-app` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+## Options
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+| Name                | Default   | Description                                                                                                                  |
+| ------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| mini                | false     | enable mini mode, [see more details](https://aplayer.js.org/#/home?id=mini-mode)                                             |
+| autoplay            | false     | audio autoplay                                                                                                               |
+| theme               | '#b7daff' | main color                                                                                                                   |
+| loop                | 'all'     | player loop play, values: 'all', 'one', 'none'                                                                               |
+| order               | 'list'    | player play order, values: 'list', 'random'                                                                                  |
+| volume              | 0.7       | default volume, notice that player will remember user setting, default volume will not work after user set volume themselves |
+| audio               | -         | audio info, should be an object or object array **strict json string is required in custom element**                         |
+| audio.name          | -         | audio name                                                                                                                   |
+| audio.artist        | -         | audio artist                                                                                                                 |
+| audio.url           | -         | audio url                                                                                                                    |
+| audio.cover         | -         | audio cover                                                                                                                  |
+| audio.lrc           | -         | URL or string of lrc file                                                                                                    |
+| audio.theme         | -         | main color when switching to this audio, it has priority over the above theme                                                |
+| audio.type          | 'auto'    | values: 'auto', 'hls', 'normal' or other custom type, [see more details](https://aplayer.js.org/#/home?id=mse-support)       |
+| mutex               | true      | prevent to play multiple player at the same time, pause other players when this player start play                            |
+| list_folded         | false     | indicate whether list should folded at first                                                                                 |
+| <!--list_max_height | -         | list max height -->                                                                                                          |

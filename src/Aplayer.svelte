@@ -100,7 +100,7 @@
       skipTime = setTimeout(() => {
         $playList.playingIndex =
           ($playList.playingIndex + 1) % $playList.audio.length;
-        if (!this.paused) {
+        if (player.paused) {
           play();
         }
       }, 2000);

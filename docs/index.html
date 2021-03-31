@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>Svelte Aplayer with Custom Elment build</title>
     <style>
       #app {
@@ -23,9 +25,22 @@
         height: 80vh;
         justify-content: space-evenly;
       }
+      .github, .title {
+        text-align: center;
+      }
+      .github {
+        margin-bottom: 0;
+      }
+      .github button {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
+    <h1 class="title">Svelte Aplayer</h1>
+    <p class="github">
+      See document on <a href="https://github.com/fengkx/svelte-aplayer"><button>GitHub</button></a>
+    </p>
     <div id="app">
       <div class="aplayer-wrap">
         <s-aplayer
@@ -113,6 +128,6 @@
         ></s-aplayer>
       </div>
     </div>
-    <script type="module" src="dist/wc/svelte-aplayer.es.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svelte-aplayer/dist/wc/svelte-aplayer.umd.js"></script>
   </body>
 </html>

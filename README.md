@@ -14,7 +14,7 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 
 ## Usage
 
-[Example](custom element)
+[Example](https://fengkx.github.io/svelte-aplayer/)
 
 ## Options
 

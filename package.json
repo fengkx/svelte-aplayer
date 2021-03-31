@@ -9,7 +9,8 @@
     "format": "prettier -w **/*.{svelte,ts,js}",
     "serve": "vite preview"
   },
-  "browser": "dist/",
+  "browser": "dist/wc/svelte-aplayer.umd.js",
+  "module": "dist/wc/svelte-aplayer.es.js",
   "homepage": "https://github.com/fengkx/svelte-aplayer",
   "files": [
     "dist/**/*"

@@ -89,6 +89,12 @@
     console.log(lrcActiveIndex);
     if (mode.includes("lrc")) {
       while (
+        lrcActiveIndex > 0 &&
+        player.currentTime < $lrc[lrcActiveIndex][0]
+      ) {
+        lrcActiveIndex--;
+      }
+      while (
         lrcActiveIndex + 1 < $lrc.length &&
         player.currentTime >= $lrc[lrcActiveIndex + 1][0]
       ) {

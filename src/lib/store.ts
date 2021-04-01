@@ -23,10 +23,11 @@ type ControlState = {
   showList: boolean;
 };
 
-export function createStore() {
+type DispatchFunc = (name: string, detail?: any) => void;
+export function createStore(dispatch: DispatchFunc) {
   const player = document.createElement("audio");
   instances.push(player);
-
+  bindAudioEvent(player, dispatch);
   let currentTime = writable(0);
   let duration = writable(NaN);
 
@@ -58,7 +59,7 @@ export function createStore() {
     playingIndex: 0,
     audio: [],
   });
-
+  const audioList = derived(playList, ($pl) => $pl.audio);
   const controlState = writable<ControlState>({
     volume: 0.7,
     loop: "all",
@@ -128,9 +129,28 @@ export function createStore() {
     []
   );
 
+  let initSong = false;
+  currentSong.subscribe((song) => {
+    if (initSong) {
+      dispatch("listswitch", song);
+    }
+    initSong = true;
+  });
+  let initAudioList = false;
+  audioList.subscribe((list) => {
+    if (initAudioList) {
+      dispatch("listchange", list);
+    }
+    initSong = true;
+  });
+  lrc.subscribe((data) => {
+    data.length > 0 ? dispatch("lrcshow") : dispatch("lrchide");
+  });
+
   return {
     player,
     playList,
+    audioList,
     currentSong,
     rdTime,
     currentTime,
@@ -142,4 +162,37 @@ export function createStore() {
     controlState,
     volumeState,
   };
+}
+
+function bindAudioEvent(player: HTMLAudioElement, dispatch: DispatchFunc) {
+  const audioEvents = [
+    "abort",
+    "canplay",
+    "canplaythrough",
+    "durationchange",
+    "emptied",
+    "ended",
+    "error",
+    "loadeddata",
+    "loadedmetadata",
+    "loadstart",
+    "mozaudioavailable",
+    "pause",
+    "play",
+    "playing",
+    "progress",
+    "ratechange",
+    "seeked",
+    "seeking",
+    "stalled",
+    "suspend",
+    "timeupdate",
+    "volumechange",
+    "waiting",
+  ];
+  audioEvents.forEach((name) => {
+    player.addEventListener(name, (ev) => {
+      dispatch(name, ev);
+    });
+  });
 }

@@ -37,5 +37,53 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 | list_folded     | false     | indicate whether list should folded at first                                                                                 |
 | list_max_height | -         | list max height                                                                                                              |
 
+## Event
+
+Audio Events
+
+- abort
+- canplay
+- canplaythrough
+- durationchange
+- emptied
+- ended
+- error
+- loadeddata
+- loadedmetadata
+- loadstart
+- mozaudioavailable
+- pause
+- play
+- playing
+- progress
+- ratechange
+- seeked
+- seeking
+- stalled
+- suspend
+- timeupdate
+- volumechange
+- waiting
+
+For svelte compatibility native events are wrapped in the `detail` property of the CustomEvent.
+
+```js
+document.querySelector("s-aplayer").addEventListener("play", (ev) => {
+  console.log(ev); // CustomEvent object
+  console.log(ev.detail); // audio element play event object
+});
+```
+
+Player Events
+
+- listshow
+- listhide
+- listswitch
+- listchange
+- destroy
+- lrcshow
+- lrchide
+
 # Piror Art
+
 - https://github.com/DIYgod/APlayer/

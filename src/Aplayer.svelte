@@ -4,8 +4,9 @@
   import { createStore, instances } from "./lib/store";
   import { volumeEventHandlers } from "./lib/volume-handler";
   import { progressEventHandlers } from "./lib/progress-handlers";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import { propsBool, isMobile } from "./lib/utils";
+  import { get_current_component } from "svelte/internal";
 
   import {
     soundUnmuted,
@@ -18,9 +19,17 @@
     loopNone,
   } from "./assets/svg";
 
+  const component = get_current_component();
+  const svelteDispatch = createEventDispatcher();
+  const dispatch = (name, detail?: any) => {
+    svelteDispatch(name, detail);
+    component.dispatchEvent &&
+      component.dispatchEvent(new CustomEvent(name, { detail }));
+  };
   const {
     player,
     playList,
+    audioList,
     currentSong,
     rdTime,
     currentTime,
@@ -31,7 +40,7 @@
     lrc,
     controlState,
     volumeState,
-  } = createStore();
+  } = createStore(dispatch);
   export let audio: any[] | string;
   export let order = $controlState.order;
   export let loop = $controlState.loop;
@@ -45,8 +54,7 @@
   let playLock = !autoplay;
   $: parsedAudio = typeof audio === "string" ? JSON.parse(audio) : audio;
   $: $playList.audio = Array.isArray(parsedAudio) ? parsedAudio : [parsedAudio];
-  $: initShowList =
-    !propsBool($$props, "list_folded") && $playList.audio.length > 1;
+  $: initShowList = !propsBool($$props, "list_folded") && $audioList.length > 1;
   $: $controlState.showList = initShowList;
   $: $controlState.loop = loop;
   $: $controlState.order = order;
@@ -111,10 +119,10 @@
     console.warn(
       "An audio error has occurred, player will skip forward in 2 seconds."
     );
-    if ($playList.audio.length > 1) {
+    if ($audioList.length > 1) {
       skipTime = setTimeout(() => {
         $playList.playingIndex =
-          ($playList.playingIndex + 1) % $playList.audio.length;
+          ($playList.playingIndex + 1) % $audioList.length;
         if (player.paused) {
           play();
         }
@@ -133,9 +141,7 @@
     $duration = player.duration;
   });
   const jumpNext = () => {
-    const audios = Array.isArray($playList.audio)
-      ? $playList.audio
-      : [$playList.audio];
+    const audios = $audioList;
     const nextIdx = ($playList.playingIndex + 1) % audios.length;
     if ($controlState.loop === "none") {
       if ($controlState.order === "list") {
@@ -184,13 +190,16 @@
     progressDragMove = progressHandlers.progressDragMove;
     progressDragEnd = progressHandlers.progressDragEnd;
   });
+  onDestroy(() => {
+    dispatch("destroy");
+  });
 </script>
 
 <div
   bind:this={rootEl}
   class="aplayer"
   class:aplayer-withlrc={$lrc.length > 0}
-  class:aplayer-withlist={$playList.audio.length > 1}
+  class:aplayer-withlist={$audioList.length > 1}
   class:aplayer-narrow={mini}
   class:aplayer-mobile={isMobile}
 >
@@ -354,12 +363,15 @@
             {/if}
           </button>
 
-          {#if $playList.audio.length > 1}
+          {#if $audioList.length > 1}
             <button
               type="button"
               class="aplayer-icon aplayer-icon-menu"
               on:click={() => {
                 $controlState.showList = !$controlState.showList;
+                $controlState.showList
+                  ? dispatch("listshow")
+                  : dispatch("listhide");
               }}
             >
               <svg
@@ -383,7 +395,7 @@
       bind:this={playListElement}
     >
       <ol>
-        {#each $playList.audio as song, idx}
+        {#each $audioList as song, idx}
           <li
             on:click={() => {
               $playList.playingIndex = idx;

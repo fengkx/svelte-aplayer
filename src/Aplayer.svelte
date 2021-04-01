@@ -40,6 +40,7 @@
   export let mutex = true;
   export let autoplay = false;
   export let theme: string;
+  export let list_max_height: number;
 
   let playLock = !autoplay;
   $: parsedAudio = typeof audio === "string" ? JSON.parse(audio) : audio;
@@ -50,6 +51,10 @@
   $: $controlState.loop = loop;
   $: $controlState.order = order;
   $: $controlState.volume = volume;
+  $: playerListHeight = Math.min(
+    playListElement?.scrollHeight ?? 0,
+    list_max_height
+  );
   $: player.volume = volume;
   $: player.src = $currentSong.url;
   $: themeColor = $currentSong.theme ?? theme ?? "#fadfa3";
@@ -162,7 +167,6 @@
 
   let playListElement: HTMLElement;
   let playerListHeight = 0;
-  $: playerListHeight = playListElement?.scrollHeight ?? 0;
 
   let rootEl: HTMLElement;
   onMount(() => {

@@ -18,22 +18,22 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 
 ## Options
 
-| Name                | Default   | Description                                                                                                                  |
-| ------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| mini                | false     | enable mini mode, [see more details](https://aplayer.js.org/#/home?id=mini-mode)                                             |
-| autoplay            | false     | audio autoplay                                                                                                               |
-| theme               | '#b7daff' | main color                                                                                                                   |
-| loop                | 'all'     | player loop play, values: 'all', 'one', 'none'                                                                               |
-| order               | 'list'    | player play order, values: 'list', 'random'                                                                                  |
-| volume              | 0.7       | default volume, notice that player will remember user setting, default volume will not work after user set volume themselves |
-| audio               | -         | audio info, should be an object or object array **strict json string is required in custom element**                         |
-| audio.name          | -         | audio name                                                                                                                   |
-| audio.artist        | -         | audio artist                                                                                                                 |
-| audio.url           | -         | audio url                                                                                                                    |
-| audio.cover         | -         | audio cover                                                                                                                  |
-| audio.lrc           | -         | URL or string of lrc file                                                                                                    |
-| audio.theme         | -         | main color when switching to this audio, it has priority over the above theme                                                |
-| audio.type          | 'auto'    | values: 'auto', 'hls', 'normal' or other custom type, [see more details](https://aplayer.js.org/#/home?id=mse-support)       |
-| mutex               | true      | prevent to play multiple player at the same time, pause other players when this player start play                            |
-| list_folded         | false     | indicate whether list should folded at first                                                                                 |
-| <!--list_max_height | -         | list max height -->                                                                                                          |
+| Name            | Default   | Description                                                                                                                  |
+| --------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| mini            | false     | enable mini mode, [see more details](https://aplayer.js.org/#/home?id=mini-mode)                                             |
+| autoplay        | false     | audio autoplay                                                                                                               |
+| theme           | '#b7daff' | main color                                                                                                                   |
+| loop            | 'all'     | player loop play, values: 'all', 'one', 'none'                                                                               |
+| order           | 'list'    | player play order, values: 'list', 'random'                                                                                  |
+| volume          | 0.7       | default volume, notice that player will remember user setting, default volume will not work after user set volume themselves |
+| audio           | -         | audio info, should be an object or object array **strict json string is required in custom element**                         |
+| audio.name      | -         | audio name                                                                                                                   |
+| audio.artist    | -         | audio artist                                                                                                                 |
+| audio.url       | -         | audio url                                                                                                                    |
+| audio.cover     | -         | audio cover                                                                                                                  |
+| audio.lrc       | -         | URL or string of lrc file                                                                                                    |
+| audio.theme     | -         | main color when switching to this audio, it has priority over the above theme                                                |
+| audio.type      | 'auto'    | values: 'auto', 'hls', 'normal' or other custom type, [see more details](https://aplayer.js.org/#/home?id=mse-support)       |
+| mutex           | true      | prevent to play multiple player at the same time, pause other players when this player start play                            |
+| list_folded     | false     | indicate whether list should folded at first                                                                                 |
+| list_max_height | -         | list max height                                                                                                              |

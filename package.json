@@ -5,8 +5,8 @@
     "dev": "vite",
     "build": "npm run build:wc && npm run build:svelte",
     "build:wc": "cross-env CUSTOM_ELEMENT=1 vite build",
-    "build:svelte": "cross-env CUSTOM_ELEMENT=0 vite build -c vite.config.svelte.js",
-    "format": "prettier -w **/*.{svelte,ts,js,html,md}",
+    "build:svelte": "cross-env CUSTOM_ELEMENT=0 vite build",
+    "format": "prettier -w **/**/*.{svelte,ts,js,html,md}",
     "serve": "vite preview"
   },
   "browser": "dist/wc/svelte-aplayer.umd.js",
@@ -15,10 +15,18 @@
   "files": [
     "dist/**/*"
   ],
+  "keywords": [
+    "player",
+    "aplayer",
+    "svelte",
+    "webcomponent",
+    "component"
+  ],
   "devDependencies": {
     "@rollup/plugin-image": "^2.0.6",
     "@sveltejs/vite-plugin-svelte": "next",
     "cross-env": "^7.0.3",
+    "git-rev-sync": "^3.0.1",
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",

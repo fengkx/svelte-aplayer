@@ -58,3 +58,15 @@ export function propsBool(props: Record<string, any>, key: string) {
   const v = props[key];
   return !(v === null || v === undefined || v === "false");
 }
+
+declare global {
+  var SVELTE_APLAYER_VERSION: string;
+  var GIT_HASH: string;
+}
+
+/* global SVELTE_APLAYER_VERSION GIT_HASH */
+// console.log(`${'\n'} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} ${GIT_HASH} %c http://aplayer.js.org ${'\n'}`, 'color: #fff; background: #ff3e00; padding:5px 0;', 'background: #fadfa3; padding:5px 0;');
+console.log(
+  `${"\n"} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} ${GIT_HASH} ${"\n"}`,
+  "color: #fff; background: #ff3e00; padding:5px 0;"
+);

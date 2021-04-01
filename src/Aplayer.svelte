@@ -39,8 +39,8 @@
   export let mini = false;
   export let mutex = true;
   export let autoplay = false;
-  export let theme: string;
-  export let list_max_height: number;
+  export let theme: string = "#fadfa3";
+  export let list_max_height: number = Infinity;
 
   let playLock = !autoplay;
   $: parsedAudio = typeof audio === "string" ? JSON.parse(audio) : audio;
@@ -57,7 +57,7 @@
   );
   $: player.volume = volume;
   $: player.src = $currentSong.url;
-  $: themeColor = $currentSong.theme ?? theme ?? "#fadfa3";
+  $: themeColor = $currentSong.theme ?? theme;
   $: {
     if (rootEl) {
       rootEl.style.setProperty("--theme-color", themeColor);

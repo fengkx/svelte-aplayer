@@ -33,7 +33,6 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 | audio.cover     | -         | audio cover                                                                                                                  |
 | audio.lrc       | -         | URL or string of lrc file                                                                                                    |
 | audio.theme     | -         | main color when switching to this audio, it has priority over the above theme                                                |
-| audio.type      | 'auto'    | values: 'auto', 'hls', 'normal' or other custom type, [see more details](https://aplayer.js.org/#/home?id=mse-support)       |
 | mutex           | true      | prevent to play multiple player at the same time, pause other players when this player start play                            |
 | list_folded     | false     | indicate whether list should folded at first                                                                                 |
 | list_max_height | -         | list max height                                                                                                              |

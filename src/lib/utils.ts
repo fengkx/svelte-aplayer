@@ -66,7 +66,7 @@ declare global {
 
 /* global SVELTE_APLAYER_VERSION GIT_HASH */
 console.log(
-  `${"\n"} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} ${GIT_HASH} %c http://svelte-aplayer.js.org ${"\n"}${"\n"}`,
+  `${"\n"} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} %c http://svelte-aplayer.js.org ${"\n"}${"\n"}`,
   "color: #fff; background: #ff3e00; padding:5px 0;",
   "background: #fadfa3; padding:5px 0;"
 );

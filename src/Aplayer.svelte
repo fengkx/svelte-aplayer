@@ -63,25 +63,27 @@
       console.log(instances);
       instances.forEach((audio) => audio.pause());
     }
-    player.play().catch(err => {
-      console.error(err)
+    player.play().catch((err) => {
+      console.error(err);
     });
   };
+
+  $: mode = $lrc && $lrc.length > 0 ? "withlrc" : "";
+  let lrcActiveIndex = -1;
+
   $: {
-    player.src // add as dependency
+    player.src; // add as dependency
+    lrcActiveIndex = -1;
     if (!playLock) {
       play();
     }
     playLock = false;
   }
-
-  $: mode = $lrc && $lrc.length > 0 ? "withlrc" : "";
-  let lrcActiveIndex = -1;
-
   player.addEventListener("timeupdate", () => {
     $currentTime = player.currentTime;
+    console.log(lrcActiveIndex);
     if (mode.includes("lrc")) {
-      if (
+      while (
         lrcActiveIndex + 1 < $lrc.length &&
         player.currentTime >= $lrc[lrcActiveIndex + 1][0]
       ) {

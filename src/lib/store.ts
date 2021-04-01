@@ -141,7 +141,7 @@ export function createStore(dispatch: DispatchFunc) {
     if (initAudioList) {
       dispatch("listchange", list);
     }
-    initSong = true;
+    initAudioList = true;
   });
   lrc.subscribe((data) => {
     data.length > 0 ? dispatch("lrcshow") : dispatch("lrchide");

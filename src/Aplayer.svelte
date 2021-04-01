@@ -50,8 +50,18 @@
   export let autoplay = false;
   export let theme: string = "#fadfa3";
   export let list_max_height: number = Infinity;
+  let playLock; // whether call play when player.src changed
+  let audioPropInited: boolean = false;
+  $: { // lock play when audio attr change
+    audio;
+    if (audioPropInited) {
+      playLock = true;
+    } else {
+      playLock = !autoplay;
+    }
+    audioPropInited = true;
+  }
 
-  let playLock = !autoplay;
   $: parsedAudio = typeof audio === "string" ? JSON.parse(audio) : audio;
   $: $playList.audio = Array.isArray(parsedAudio) ? parsedAudio : [parsedAudio];
   $: initShowList = !propsBool($$props, "list_folded") && $audioList.length > 1;
@@ -64,7 +74,7 @@
     list_max_height
   );
   $: player.volume = volume;
-  $: player.src = $currentSong.url;
+  $: player.src = $currentSong.url; // player will pause everytime when its src change
   $: themeColor = $currentSong.theme ?? theme;
   $: {
     if (rootEl) {
@@ -85,6 +95,7 @@
 
   $: {
     player.src; // add as dependency
+    // player will pause everytime when its src change
     lrcActiveIndex = -1;
     if (!playLock) {
       play();

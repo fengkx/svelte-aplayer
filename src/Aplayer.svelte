@@ -65,7 +65,6 @@
   }
   const play = () => {
     if (mutex) {
-      console.log(instances);
       instances.forEach((audio) => audio.pause());
     }
     player.play().catch((err) => {
@@ -86,7 +85,6 @@
   }
   player.addEventListener("timeupdate", () => {
     $currentTime = player.currentTime;
-    console.log(lrcActiveIndex);
     if (mode.includes("lrc")) {
       while (
         lrcActiveIndex > 0 &&

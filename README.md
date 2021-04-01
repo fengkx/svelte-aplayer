@@ -37,3 +37,6 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 | mutex           | true      | prevent to play multiple player at the same time, pause other players when this player start play                            |
 | list_folded     | false     | indicate whether list should folded at first                                                                                 |
 | list_max_height | -         | list max height                                                                                                              |
+
+# Piror Art
+- https://github.com/DIYgod/APlayer/

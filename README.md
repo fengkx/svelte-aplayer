@@ -14,7 +14,27 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 
 ## Usage
 
-[Example](https://fengkx.github.io/svelte-aplayer/)
+```shell
+npm i svelte-aplayer
+```
+
+Using in webcomponent
+[Example](https://svelte-aplayer.js.org)
+
+Using in Svelte
+
+```sveltehtml
+import Aplayer from 'svelte-aplayer/dist/svelte/svelte-aplayer.es.js'
+import 'svelte-aplayer/dist/svelte/style.css'
+
+...
+
+<Aplayer audio={
+    {name:'君の知らない物語',
+    artist: 'supercell',
+    cover: 'https://blog-static.fengkx.top/svelte-aplayer/bakemonogatari-ed.jpg',
+    url: "https://blog-static.fengkx.top/svelte-aplayer/bakemonogatari-ed.mp3"}} />
+```
 
 ## Options
 

@@ -52,7 +52,8 @@
   export let list_max_height: number = Infinity;
   let playLock; // whether call play when player.src changed
   let audioPropInited: boolean = false;
-  $: { // lock play when audio attr change
+  $: {
+    // lock play when audio attr change
     audio;
     if (audioPropInited) {
       playLock = true;
@@ -76,9 +77,12 @@
   $: player.volume = volume;
   $: player.src = $currentSong.url; // player will pause everytime when its src change
   $: themeColor = $currentSong.theme ?? theme;
+  export let base_font_size = "12";
+  $: baseFontSize = String(base_font_size).match(/^\d+/)[0] + "px";
   $: {
     if (rootEl) {
       rootEl.style.setProperty("--theme-color", themeColor);
+      rootEl.style.setProperty("--base-font-size", baseFontSize);
     }
   }
   const play = () => {
@@ -257,8 +261,10 @@
         <div class="aplayer-lrc">
           <div
             class="aplayer-lrc-contents"
-            style="transform: translateY({Math.max(lrcActiveIndex, 0) *
-              -16}px);"
+            style="transform: translateY(calc({Math.max(
+              lrcActiveIndex,
+              0
+            )} * -1 * calc(var(--base-font-size) + 4px)))"
           >
             {#each $lrc as line, index (line[0])}
               <p class:aplayer-lrc-current={index === lrcActiveIndex}>
@@ -428,8 +434,9 @@
 
 <style lang="scss">
   .aplayer {
-    --aplayer-height: 66px;
-    --lrc-height: 30px;
+    --base-font-size: 12px;
+    --aplayer-height: calc(var(--base-font-size) * 5.5);
+    --lrc-height: calc(calc(var(--base-font-size) + 4px) * 2);
     --aplayer-height-lrc: calc(var(--aplayer-height) + var(--lrc-height) - 6px);
     --theme-color: #fadfa3;
     position: relative;
@@ -452,8 +459,8 @@
     }
 
     .aplayer-icon {
-      width: 15px;
-      height: 15px;
+      width: calc(var(--base-font-size) + 3px);
+      height: calc(var(--base-font-size) + 3px);
       border: none;
       background-color: transparent;
       outline: none;
@@ -461,7 +468,7 @@
       opacity: 0.8;
       vertical-align: middle;
       padding: 0;
-      font-size: 12px;
+      font-size: var(--base-font-size);
       margin: 0;
       display: inline-block;
 
@@ -523,24 +530,24 @@
       }
     }
     .aplayer-info {
-      margin-left: 66px;
+      margin-left: var(--aplayer-height);
+      height: var(--aplayer-height);
       padding: 14px 7px 0 10px;
-      height: 66px;
       box-sizing: border-box;
       .aplayer-music {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         user-select: text;
-        margin: 0 0 13px 5px;
+        margin: 0 0 calc(var(--base-font-size) + 1px) 5px;
         padding-bottom: 2px;
         cursor: default;
 
         .aplayer-title {
-          font-size: 14px;
+          font-size: calc(var(--base-font-size) + 2px);
         }
         .aplayer-artist {
-          font-size: 12px;
+          font-size: var(--base-font-size);
           color: #666;
         }
       }
@@ -548,6 +555,7 @@
       .aplayer-controller {
         display: flex;
         position: relative;
+        align-items: center;
 
         .aplayer-bar-wrap {
           flex: 1;
@@ -612,7 +620,7 @@
           position: relative;
           right: 0;
           bottom: 4px;
-          height: 17px;
+          height: calc(var(--base-font-size) + 5px);
           color: #999;
           font-size: 11px;
           padding-left: 7px;
@@ -676,13 +684,13 @@
       height: var(--lrc-height);
       text-align: center;
       overflow: hidden;
-      margin: -10px 0 7px;
+      margin: -10px 0 calc(var(--base-font-size) - 5px);
 
       p {
-        font-size: 12px;
+        font-size: var(--base-font-size);
         color: #666;
-        line-height: 16px !important;
-        height: 16px !important;
+        line-height: calc(var(--base-font-size) + 4px) !important;
+        height: calc(var(--base-font-size) + 4px) !important;
         padding: 0 !important;
         margin: 0 !important;
         transition: all 0.5s ease-out;
@@ -726,10 +734,10 @@
       li {
         position: relative;
         text-align: left;
-        height: 32px;
+        height: calc((var(--base-font-size) + 4px) * 2);
         line-height: 32px;
         padding: 0 15px;
-        font-size: 12px;
+        font-size: var(--base-font-size);
         border-top: 1px solid #e9e9e9;
         cursor: pointer;
         transition: all 0.2s ease;

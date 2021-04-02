@@ -56,6 +56,7 @@ import 'svelte-aplayer/dist/svelte/style.css'
 | mutex           | true      | prevent to play multiple player at the same time, pause other players when this player start play                            |
 | list_folded     | false     | indicate whether list should folded at first                                                                                 |
 | list_max_height | -         | list max height                                                                                                              |
+| base_font_size  | 12        | base font size to adjust the whole size of the player as well as lrc font size                                               |
 
 ## Event
 

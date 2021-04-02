@@ -189,9 +189,7 @@
   let playedBar: HTMLElement;
   let volumeDragStart, volumeDragMove, volumeDragEnd;
   let progressDragStart, progressDragMove, progressDragEnd;
-
   let playListElement: HTMLElement;
-  let playerListHeight = 0;
 
   let rootEl: HTMLElement;
   onMount(() => {
@@ -204,6 +202,12 @@
     progressDragStart = progressHandlers.progressDragStart;
     progressDragMove = progressHandlers.progressDragMove;
     progressDragEnd = progressHandlers.progressDragEnd;
+    playListElement.addEventListener("transitionend", () => {
+      playerListHeight = Math.min(
+        playListElement?.scrollHeight ?? 0,
+        list_max_height
+      );
+    });
   });
   onDestroy(() => {
     dispatch("destroy");

@@ -762,7 +762,7 @@
 
         .aplayer-list-cur {
           width: 3px;
-          height: 22px;
+          height: calc((var(--base-font-size) + 4px) * 2 - 10px);
           position: absolute;
           left: 0;
           top: 5px;

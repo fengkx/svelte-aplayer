@@ -1,6 +1,6 @@
 {
   "name": "svelte-aplayer",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "npm run build:wc && npm run build:svelte",

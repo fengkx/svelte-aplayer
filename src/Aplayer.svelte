@@ -183,7 +183,11 @@
       $playList.playingIndex = nextIdx;
     }
   };
-  player.addEventListener("ended", jumpNext);
+  player.addEventListener("ended", () => {
+    if (!player.paused) {
+      jumpNext();
+    }
+  });
 
   let volumeBar: HTMLElement;
   let playedBar: HTMLElement;

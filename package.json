@@ -9,6 +9,7 @@
     "format": "prettier -w **/**/*.{svelte,ts,js,html,md}",
     "serve": "vite preview"
   },
+  "type": "module",
   "license": "MIT",
   "browser": "dist/wc/svelte-aplayer.umd.js",
   "module": "dist/wc/svelte-aplayer.es.js",
@@ -24,18 +25,19 @@
     "component"
   ],
   "devDependencies": {
-    "@rollup/plugin-image": "^2.0.6",
-    "@sveltejs/vite-plugin-svelte": "next",
+    "@rollup/plugin-image": "^3.0.2",
+    "@sveltejs/vite-plugin-svelte": "^2.0.2",
+    "async-git": "^1.13.3",
     "cross-env": "^7.0.3",
-    "git-rev-sync": "^3.0.1",
     "pre-commit": "^1.2.2",
-    "prettier": "^2.2.1",
-    "prettier-plugin-svelte": "^2.2.0",
-    "sass": "^1.32.8",
-    "svelte": "^3.35.0",
-    "svelte-preprocess": "^4.6.9",
-    "typescript": "^4.2.3",
-    "vite": "^2.1.3"
+    "prettier": "^2.8.4",
+    "prettier-plugin-svelte": "^2.9.0",
+    "sass": "^1.58.3",
+    "svelte": "^3.55.1",
+    "svelte-preprocess": "^5.0.1",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.2",
+    "vite-plugin-dts": "^2.0.0-beta.1"
   },
   "pre-commit": [
     "format"

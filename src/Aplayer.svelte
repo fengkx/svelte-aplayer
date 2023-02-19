@@ -197,7 +197,7 @@
 
   let rootEl: HTMLElement;
   onMount(() => {
-    if (location.hostname === "localhost") window.theAudio = player;
+    if (location.hostname === "localhost" && window) window.theAudio = player;
     const volumeHandlers = volumeEventHandlers(player, volumeBar);
     volumeDragStart = volumeHandlers.volumeDragStart;
     volumeDragMove = volumeHandlers.volumeDragMove;
@@ -206,7 +206,7 @@
     progressDragStart = progressHandlers.progressDragStart;
     progressDragMove = progressHandlers.progressDragMove;
     progressDragEnd = progressHandlers.progressDragEnd;
-    playListElement.addEventListener("transitionend", () => {
+    playListElement?.addEventListener("transitionend", () => {
       playerListHeight = Math.min(
         playListElement?.scrollHeight ?? 0,
         list_max_height

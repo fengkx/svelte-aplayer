@@ -6,7 +6,8 @@ export const secondToTime = (second) => {
   return (hour > 0 ? [hour, min, sec] : [min, sec]).map(add0).join(":");
 };
 
-export const isMobile = /mobile/i.test(window.navigator.userAgent);
+export const isServer = typeof window === "undefined";
+export const isMobile = !isServer && /mobile/i.test(window.navigator.userAgent);
 export const nameMap = {
   dragStart: isMobile ? "touchstart" : "mousedown",
   dragMove: isMobile ? "touchmove" : "mousemove",

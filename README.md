@@ -3,6 +3,8 @@
 > Aplayer port in Svelte with Custom element (WebComponent) build
 
 ## Introduction
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffengkx%2Fsvelte-aplayer.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffengkx%2Fsvelte-aplayer?ref=badge_shield)
+
 
 This is a [Aplayer](https://github.com/DIYgod/APlayer) port in [Svelte](https://svelte.dev/).
 
@@ -108,3 +110,7 @@ Player Events
 # Piror Art
 
 - https://github.com/DIYgod/APlayer/
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffengkx%2Fsvelte-aplayer.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffengkx%2Fsvelte-aplayer?ref=badge_large)

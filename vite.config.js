@@ -1,24 +1,33 @@
-import * as path from "path";
-import { defineConfig } from "vite";
-import svelte from "@sveltejs/vite-plugin-svelte";
-import image from "@rollup/plugin-image";
-import gitRevSync from "git-rev-sync";
-import pkg from "./package.json";
+const path = require("path");
+const fs = require("fs");
+const { execFileSync } = require("child_process");
+const { defineConfig } = require("vite");
+const svelte = require("@sveltejs/vite-plugin-svelte");
+const image = require("@rollup/plugin-image");
+
+const rootDir = __dirname;
+const pkg = JSON.parse(
+  fs.readFileSync(path.resolve(rootDir, "package.json"), "utf8")
+);
+const gitHash = execFileSync("git", ["rev-parse", "--short", "HEAD"], {
+  cwd: rootDir,
+  encoding: "utf8",
+}).trim();
 
 const customElement =
   process.env.CUSTOM_ELEMENT !== "0" && process.env.CUSTOM_ELEMENT !== "false";
 // https://vitejs.dev/config/
-export default defineConfig({
+module.exports = defineConfig({
   define: {
-    GIT_HASH: `'${gitRevSync.short()}'`,
+    GIT_HASH: `'${gitHash}'`,
     SVELTE_APLAYER_VERSION: `'${pkg.version}'`,
   },
   build: {
-    outDir: path.resolve(__dirname, "dist", customElement ? 'wc' : 'svelte'),
+    outDir: path.resolve(rootDir, "dist", customElement ? "wc" : "svelte"),
     lib: {
-      entry: path.resolve(__dirname, "src/main.ts"),
+      entry: path.resolve(rootDir, "src/main.ts"),
       name: "Aplayer",
     },
   },
-  plugins: [svelte(), image({})],
+  plugins: [svelte.default(), image({})],
 });

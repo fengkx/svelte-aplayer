@@ -7,7 +7,9 @@
     "build:wc": "cross-env CUSTOM_ELEMENT=1 vite build",
     "build:svelte": "cross-env CUSTOM_ELEMENT=0 vite build",
     "format": "prettier -w **/**/*.{svelte,ts,js,html,md}",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "license": "MIT",
   "browser": "dist/wc/svelte-aplayer.umd.js",
@@ -24,10 +26,10 @@
     "component"
   ],
   "devDependencies": {
+    "@playwright/test": "^1.62.0",
     "@rollup/plugin-image": "^2.0.6",
     "@sveltejs/vite-plugin-svelte": "next",
     "cross-env": "^7.0.3",
-    "git-rev-sync": "^3.0.1",
     "pre-commit": "^1.2.2",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",

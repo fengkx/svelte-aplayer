@@ -1,13 +1,15 @@
 name: Publish PR Preview
 
 on:
+  push:
+    branches: [master]
   pull_request:
     types: [opened, synchronize, reopened]
 
 permissions: {}
 
 concurrency:
-  group: pkg-pr-new-${{ github.event.pull_request.number }}
+  group: pkg-pr-new-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:

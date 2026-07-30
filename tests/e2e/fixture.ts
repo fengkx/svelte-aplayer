@@ -95,7 +95,7 @@ const players: HTMLElement[] = [];
 const mediaElements: (HTMLAudioElement | undefined)[] = [];
 
 const createPlayer = (
-  playerTracks: typeof tracks[number] | typeof tracks,
+  playerTracks: (typeof tracks)[number] | typeof tracks,
   playerIndex: number
 ) => {
   const player = document.createElement("s-aplayer");
@@ -161,4 +161,9 @@ Object.assign(window, {
   },
 });
 
-import("../../src/main");
+if (parameters.has("dist")) {
+  const distEntry = "/dist/wc/svelte-aplayer.es.js";
+  import(/* @vite-ignore */ distEntry);
+} else {
+  import("../../src/main");
+}

@@ -1,3 +1,10 @@
+type VolumeEvent = MouseEvent | TouchEvent;
+
+const getClientY = (event: VolumeEvent) =>
+  event instanceof MouseEvent
+    ? event.clientY
+    : (event.changedTouches[0]?.clientY ?? 0);
+
 export function volumeEventHandlers(
   player: HTMLAudioElement,
   volumeBar: HTMLElement
@@ -6,24 +13,22 @@ export function volumeEventHandlers(
   const volumeDragStart = () => {
     volumeActive = true;
   };
-  const volumeDragMove = (ev) => {
+  const volumeDragMove = (ev: VolumeEvent) => {
     if (volumeActive) {
       let percentage =
         1 -
-        ((ev.clientY || ev.changedTouches[0].clientY) -
-          volumeBar.getBoundingClientRect().top) /
+        (getClientY(ev) - volumeBar.getBoundingClientRect().top) /
           volumeBar.clientHeight;
       percentage = Math.max(percentage, 0);
       percentage = Math.min(percentage, 1);
       player.volume = percentage;
     }
   };
-  const volumeDragEnd = (ev) => {
+  const volumeDragEnd = (ev: VolumeEvent) => {
     if (volumeActive) {
       let percentage =
         1 -
-        ((ev.clientY || ev.changedTouches[0].clientY) -
-          volumeBar.getBoundingClientRect().top) /
+        (getClientY(ev) - volumeBar.getBoundingClientRect().top) /
           volumeBar.clientHeight;
       percentage = Math.max(percentage, 0);
       percentage = Math.min(percentage, 1);

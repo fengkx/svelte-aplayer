@@ -1,4 +1,18 @@
-<svelte:options tag="s-aplayer" />
+<svelte:options
+  customElement={{ tag: "s-aplayer", extend: withLegacyDestroy }}
+/>
+
+<script module lang="ts">
+  type CustomElementConstructor = new (...args: any[]) => HTMLElement;
+
+  const withLegacyDestroy = (BaseElement: CustomElementConstructor) =>
+    class extends BaseElement {
+      $destroy() {
+        this.dispatchEvent(new CustomEvent("destroy"));
+        this.remove();
+      }
+    };
+</script>
 
 <script lang="ts">
   import { createStore, instances } from "./lib/store";
@@ -6,7 +20,6 @@
   import { progressEventHandlers } from "./lib/progress-handlers";
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import { propsBool, isMobile } from "./lib/utils";
-  import { get_current_component } from "svelte/internal";
 
   import {
     soundUnmuted,
@@ -19,12 +32,14 @@
     loopNone,
   } from "./assets/svg";
 
-  const component = get_current_component();
+  let rootEl: HTMLElement;
   const svelteDispatch = createEventDispatcher();
-  const dispatch = (name, detail?: any) => {
+  const dispatch = (name: string, detail?: any) => {
     svelteDispatch(name, detail);
-    component.dispatchEvent &&
-      component.dispatchEvent(new CustomEvent(name, { detail }));
+    const rootNode = rootEl?.getRootNode();
+    if (rootNode instanceof ShadowRoot) {
+      rootNode.host.dispatchEvent(new CustomEvent(name, { detail }));
+    }
   };
   const {
     player,
@@ -41,6 +56,13 @@
     controlState,
     volumeState,
   } = createStore(dispatch);
+  let paused = player.paused;
+  player.addEventListener("play", () => {
+    paused = false;
+  });
+  player.addEventListener("pause", () => {
+    paused = true;
+  });
   export let audio: any[] | string;
   export let order = $controlState.order;
   export let loop = $controlState.loop;
@@ -50,7 +72,7 @@
   export let autoplay = false;
   export let theme: string = "#fadfa3";
   export let list_max_height: number = Infinity;
-  let playLock; // whether call play when player.src changed
+  let playLock: boolean | undefined; // whether call play when player.src changed
   let audioPropInited: boolean = false;
   $: {
     // lock play when audio attr change
@@ -78,7 +100,7 @@
   $: player.src = $currentSong.url; // player will pause everytime when its src change
   $: themeColor = $currentSong.theme ?? theme;
   export let base_font_size = "12";
-  $: baseFontSize = String(base_font_size).match(/^\d+/)[0] + "px";
+  $: baseFontSize = (String(base_font_size).match(/^\d+/)?.[0] ?? "12") + "px";
   $: {
     if (rootEl) {
       rootEl.style.setProperty("--theme-color", themeColor);
@@ -191,11 +213,15 @@
 
   let volumeBar: HTMLElement;
   let playedBar: HTMLElement;
-  let volumeDragStart, volumeDragMove, volumeDragEnd;
-  let progressDragStart, progressDragMove, progressDragEnd;
+  type DragEventHandler = (event: MouseEvent | TouchEvent) => void;
+  let volumeDragStart: DragEventHandler = () => {};
+  let volumeDragMove: DragEventHandler = () => {};
+  let volumeDragEnd: DragEventHandler = () => {};
+  let progressDragStart: DragEventHandler = () => {};
+  let progressDragMove: DragEventHandler = () => {};
+  let progressDragEnd: DragEventHandler = () => {};
   let playListElement: HTMLElement;
 
-  let rootEl: HTMLElement;
   onMount(() => {
     if (location.hostname === "localhost" && window) window.theAudio = player;
     const volumeHandlers = volumeEventHandlers(player, volumeBar);
@@ -226,15 +252,15 @@
   class:aplayer-narrow={mini}
   class:aplayer-mobile={isMobile}
 >
-  <div class="aplayer-body ">
+  <div class="aplayer-body">
     <div
       class="aplayer-pic"
       style="background-image: url( {$currentSong.cover} )"
       on:click={() => {
-        player.paused ? play() : player.pause();
+        paused ? play() : player.pause();
       }}
     >
-      {#if !player.paused}
+      {#if !paused}
         <div class="aplayer-button aplayer-pause">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -449,7 +475,9 @@
     --theme-color: #fadfa3;
     position: relative;
     background: #fff;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.07), 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 2px 2px 0 rgba(0, 0, 0, 0.07),
+      0 1px 5px 0 rgba(0, 0, 0, 0.1);
     font-family: Arial, Helvetica, sans-serif;
     margin: 5px;
     overflow: hidden;

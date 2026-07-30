@@ -1,1 +1,4 @@
-{}
+{
+  "plugins": ["prettier-plugin-svelte"],
+  "trailingComma": "es5"
+}

@@ -1,5 +1,5 @@
-export const secondToTime = (second) => {
-  const add0 = (num) => (num < 10 ? "0" + num : "" + num);
+export const secondToTime = (second: number) => {
+  const add0 = (num: number) => (num < 10 ? "0" + num : "" + num);
   const hour = Math.floor(second / 3600);
   const min = Math.floor((second - hour * 3600) / 60);
   const sec = Math.floor(second - hour * 3600 - min * 60);
@@ -18,7 +18,7 @@ export function parseLrc(lrc_s: string): [number, string][] {
   if (lrc_s) {
     lrc_s = lrc_s.replace(/([^\]^\n])\[/g, (match, p1) => p1 + "\n[");
     const lyric = lrc_s.split("\n");
-    let lrc = [];
+    let lrc: [number, string][] = [];
     const lyricLen = lyric.length;
     for (let i = 0; i < lyricLen; i++) {
       // match lrc time
@@ -34,8 +34,10 @@ export function parseLrc(lrc_s: string): [number, string][] {
         const timeLen = lrcTimes.length;
         for (let j = 0; j < timeLen; j++) {
           const oneTime = /\[(\d{2}):(\d{2})(\.(\d{2,3}))?]/.exec(lrcTimes[j]);
-          //@ts-ignore
-          const min2sec = oneTime[1] * 60;
+          if (!oneTime) {
+            continue;
+          }
+          const min2sec = Number(oneTime[1]) * 60;
           const sec2sec = parseInt(oneTime[2]);
           const msec2sec = oneTime[4]
             ? parseInt(oneTime[4]) /
@@ -67,7 +69,7 @@ declare global {
 
 /* global SVELTE_APLAYER_VERSION GIT_HASH */
 console.log(
-  `${"\n"} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} %c http://svelte-aplayer.js.org ${"\n"}${"\n"}`,
+  `${"\n"} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} %c http://svelte-aplayer.js.org${"\n"}${"\n"}`,
   "color: #fff; background: #ff3e00; padding:5px 0;",
   "background: #fadfa3; padding:5px 0;"
 );

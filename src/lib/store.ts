@@ -1,7 +1,7 @@
 import { derived, writable } from "svelte/store";
 import { parseLrc, secondToTime } from "./utils";
 
-export const instances = [];
+export const instances: HTMLAudioElement[] = [];
 export type Audio = {
   name: string;
   artist: string;
@@ -97,8 +97,7 @@ export function createStore(dispatch: DispatchFunc) {
 
   const lrc = derived(
     currentSong,
-    // @ts-ignore
-    ($song, set) => {
+    ($song, set: (value: [number, string][]) => void) => {
       if (!$song || !$song.lrc) {
         set([]);
         return;
@@ -126,7 +125,7 @@ export function createStore(dispatch: DispatchFunc) {
         set(parseLrc(lrcSource));
       }
     },
-    []
+    [] as [number, string][]
   );
 
   let initSong = false;

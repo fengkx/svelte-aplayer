@@ -1,4 +1,5 @@
-import { expect, Page, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 type RecordedEvent = {
   name: string;
@@ -33,6 +34,47 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/tests/e2e/fixture.html");
   await page.waitForLoadState("networkidle");
   expect(pageErrors).toEqual([]);
+});
+
+test("loads the published custom element bundle", async ({ page }) => {
+  await page.goto("/tests/e2e/fixture.html?dist&single");
+
+  const player = page.locator("s-aplayer");
+  await expect(player.locator(".aplayer-title")).toHaveText("First Song");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          typeof (
+            (window as TestWindow).testHarness.players[0] as HTMLElement & {
+              $destroy?: () => void;
+            }
+          ).$destroy
+      )
+    )
+    .toBe("function");
+});
+
+test("loads the published Svelte component with the legacy constructor API", async ({
+  page,
+}) => {
+  await page.goto("/tests/e2e/svelte-dist-fixture.html");
+
+  await expect(page.locator(".aplayer-title")).toHaveText(
+    "Published Component"
+  );
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          typeof (
+            window as typeof window & {
+              publishedComponent?: { $destroy?: () => void };
+            }
+          ).publishedComponent?.$destroy
+      )
+    )
+    .toBe("function");
 });
 
 test("renders track metadata, lyrics, playlist, and visual options", async ({
@@ -425,9 +467,11 @@ test("emits destroy when the component is explicitly destroyed", async ({
   page,
 }) => {
   await page.evaluate(() => {
-    ((window as TestWindow).testHarness.players[0] as HTMLElement & {
-      $destroy: () => void;
-    }).$destroy();
+    (
+      (window as TestWindow).testHarness.players[0] as HTMLElement & {
+        $destroy: () => void;
+      }
+    ).$destroy();
   });
 
   await expect.poll(() => recordedEvents(page, "destroy")).toHaveLength(1);

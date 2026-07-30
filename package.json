@@ -21,6 +21,10 @@
   "browser": "dist/wc/svelte-aplayer.umd.js",
   "module": "dist/wc/svelte-aplayer.es.js",
   "homepage": "https://github.com/fengkx/svelte-aplayer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengkx/svelte-aplayer.git"
+  },
   "files": [
     "dist/**/*"
   ],
@@ -36,6 +40,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "@types/node": "^26.1.2",
     "cross-env": "^10.1.0",
+    "pkg-pr-new": "^0.0.82",
     "prettier": "^3.9.6",
     "prettier-plugin-svelte": "^4.1.1",
     "sass": "^1.102.0",

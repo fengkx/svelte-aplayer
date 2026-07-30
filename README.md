@@ -5,6 +5,7 @@
 ## Introduction
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ffengkx%2Fsvelte-aplayer.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ffengkx%2Fsvelte-aplayer?ref=badge_shield)
+[![pkg.pr.new](https://pkg.pr.new/badge/fengkx/svelte-aplayer)](https://pkg.pr.new/~/fengkx/svelte-aplayer)
 
 This is a [Aplayer](https://github.com/DIYgod/APlayer) port in [Svelte](https://svelte.dev/).
 

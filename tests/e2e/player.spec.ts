@@ -374,7 +374,7 @@ test("seeks, adjusts volume, and toggles mute through the controls", async ({
         (element) => element.getBoundingClientRect().height
       )
     )
-    .toBeGreaterThan(30);
+    .toBeGreaterThan(39);
 
   const volumeBox = await volumeBarWrap.boundingBox();
   if (!volumeBox) {

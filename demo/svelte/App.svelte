@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Aplayer from "../../src/Aplayer.svelte";
+  import Aplayer from "virtual:svelte-aplayer-component";
   import { tracks } from "../tracks";
 </script>
 

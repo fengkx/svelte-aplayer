@@ -8,8 +8,8 @@
       content="Svelte APlayer demo using the Web Component build"
     />
     <title>Svelte APlayer · Web Component</title>
-    <script type="module" crossorigin src="./assets/index-CD9iW4hg.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DsHYAZRE.css">
+    <script type="module" crossorigin src="./assets/index-DAHaDQ90.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C7XwNK1w.css">
   </head>
   <body>
     <main class="demo-shell">
@@ -25,14 +25,28 @@
       </header>
 
       <div class="demo-grid">
-        <section class="demo-card">
+        <section class="demo-card" data-mode="playlist">
           <h2>Playlist</h2>
           <div class="player-frame">
             <s-aplayer id="playlist-player" list_max_height="320"></s-aplayer>
           </div>
         </section>
 
-        <section class="demo-card">
+        <section class="demo-card" data-mode="lyrics">
+          <h2>Single track with lyrics</h2>
+          <div class="player-frame">
+            <s-aplayer id="lyrics-player"></s-aplayer>
+          </div>
+        </section>
+
+        <section class="demo-card" data-mode="single">
+          <h2>Single track</h2>
+          <div class="player-frame">
+            <s-aplayer id="single-player"></s-aplayer>
+          </div>
+        </section>
+
+        <section class="demo-card" data-mode="mini">
           <h2>Mini player</h2>
           <div class="player-frame">
             <s-aplayer id="mini-player" mini="true"></s-aplayer>

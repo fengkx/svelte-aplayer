@@ -13,4 +13,6 @@ const setAudio = (selector: string, audio: unknown) => {
 };
 
 setAudio("#playlist-player", tracks);
+setAudio("#lyrics-player", tracks[1]);
+setAudio("#single-player", tracks[3]);
 setAudio("#mini-player", tracks[2]);

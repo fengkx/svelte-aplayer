@@ -12,12 +12,14 @@ test("serves both source modes from one Vite server", async ({ page }) => {
   ).toHaveAttribute("href", "./web-component/");
 
   await page.goto(docsUrl("/svelte/"));
-  await expect(page.locator(".aplayer")).toHaveCount(2);
+  await expect(page.locator(".demo-card")).toHaveCount(4);
+  await expect(page.locator(".aplayer")).toHaveCount(4);
   await expect(page.locator("s-aplayer")).toHaveCount(0);
 
   await page.goto(docsUrl("/web-component/"));
-  await expect(page.locator("s-aplayer")).toHaveCount(2);
-  await expect(page.locator(".aplayer")).toHaveCount(2);
+  await expect(page.locator(".demo-card")).toHaveCount(4);
+  await expect(page.locator("s-aplayer")).toHaveCount(4);
+  await expect(page.locator(".aplayer")).toHaveCount(4);
   const haveShadowRoots = await page
     .locator("s-aplayer")
     .evaluateAll((players) =>

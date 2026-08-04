@@ -16,14 +16,28 @@
   </header>
 
   <div class="demo-grid">
-    <section class="demo-card">
+    <section class="demo-card" data-mode="playlist">
       <h2>Playlist</h2>
       <div class="player-frame">
         <Aplayer audio={tracks} list_max_height={320} />
       </div>
     </section>
 
-    <section class="demo-card">
+    <section class="demo-card" data-mode="lyrics">
+      <h2>Single track with lyrics</h2>
+      <div class="player-frame">
+        <Aplayer audio={tracks[1]} />
+      </div>
+    </section>
+
+    <section class="demo-card" data-mode="single">
+      <h2>Single track</h2>
+      <div class="player-frame">
+        <Aplayer audio={tracks[3]} />
+      </div>
+    </section>
+
+    <section class="demo-card" data-mode="mini">
       <h2>Mini player</h2>
       <div class="player-frame">
         <Aplayer audio={tracks[2]} mini />

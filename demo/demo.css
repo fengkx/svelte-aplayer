@@ -1,6 +1,6 @@
 :root {
   color: #242424;
-  background: #f7f3ed;
+  background: #fff;
   font-family:
     Inter,
     ui-sans-serif,
@@ -25,13 +25,13 @@ a {
 }
 
 .demo-shell {
-  width: min(760px, calc(100% - 32px));
+  width: min(960px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 56px 0 80px;
+  padding: 64px 0 96px;
 }
 
 .demo-header {
-  margin-bottom: 40px;
+  margin-bottom: 56px;
   text-align: center;
 }
 
@@ -43,16 +43,12 @@ a {
 
 .demo-header p {
   margin: 0;
-  color: #6f655b;
+  color: #666;
 }
 
 .badge {
   display: inline-flex;
-  padding: 6px 10px;
-  border: 1px solid #e1d6ca;
-  border-radius: 999px;
-  background: #fff;
-  color: #7a5942;
+  color: #666;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -67,38 +63,33 @@ a {
 }
 
 .demo-nav a {
-  padding: 9px 14px;
-  border: 1px solid #d6c8b9;
-  border-radius: 8px;
-  background: #fff;
+  padding: 8px 2px;
+  border-bottom: 1px solid transparent;
   text-decoration: none;
 }
 
 .demo-nav a[aria-current="page"] {
-  border-color: #ad7953;
-  background: #f6e7d7;
+  border-color: currentcolor;
 }
 
 .demo-grid {
   display: grid;
-  gap: 24px;
 }
 
 .demo-card {
-  padding: 24px;
-  border: 1px solid #e2d8cd;
-  border-radius: 16px;
-  background: rgb(255 255 255 / 82%);
-  box-shadow: 0 12px 36px rgb(75 52 32 / 8%);
+  padding: 32px 0 40px;
+  border-top: 1px solid #eee;
 }
 
 .demo-card h2 {
-  margin: 0 0 18px;
-  font-size: 1rem;
+  margin: 0 5px 20px;
+  color: #555;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .player-frame {
-  min-height: 130px;
+  min-height: 96px;
 }
 
 s-aplayer {
@@ -107,11 +98,11 @@ s-aplayer {
 
 @media (max-width: 560px) {
   .demo-shell {
-    width: min(100% - 20px, 760px);
+    width: min(100% - 20px, 960px);
     padding-top: 32px;
   }
 
   .demo-card {
-    padding: 14px;
+    padding: 28px 0 32px;
   }
 }

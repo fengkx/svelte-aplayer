@@ -1,18 +1,10 @@
 import { derived, writable } from "svelte/store";
 import { parseLrc, secondToTime } from "./utils";
+import type { AplayerAudio } from "../types";
 
 export const instances: HTMLAudioElement[] = [];
-export type Audio = {
-  name: string;
-  artist: string;
-  url: string;
-  cover: string;
-  lrc?: string;
-  theme?: string;
-};
-
 type GlobalState = {
-  audio: Audio[];
+  audio: AplayerAudio[];
   playingIndex: number;
 };
 

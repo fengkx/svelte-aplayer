@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "checkJs": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "./dist/svelte",
+    "rootDir": "./src",
+    "sourceMap": false
+  },
+  "include": ["src/svelte-aplayer.es.ts", "src/types.ts"]
+}

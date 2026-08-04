@@ -7,15 +7,17 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:wc && npm run build:svelte",
+    "build": "npm run build:wc && npm run build:svelte && npm run build:types && npm run test:types",
     "build:wc": "cross-env CUSTOM_ELEMENT=1 vite build",
     "build:svelte": "cross-env CUSTOM_ELEMENT=0 vite build",
+    "build:types": "tsc -p tsconfig.build-types.json",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "format": "prettier --write .",
     "prepare": "simple-git-hooks",
     "serve": "vite preview",
     "test:e2e": "npm run build && playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:types": "svelte-check --tsconfig ./tests/types/tsconfig.json"
   },
   "license": "MIT",
   "browser": "dist/wc/svelte-aplayer.umd.js",

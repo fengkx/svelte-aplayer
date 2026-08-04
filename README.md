@@ -26,17 +26,43 @@ Using in webcomponent
 
 Using in Svelte
 
-```sveltehtml
-import Aplayer from 'svelte-aplayer/dist/svelte/svelte-aplayer.es.js'
-import 'svelte-aplayer/dist/svelte/style.css'
+```svelte
+<script lang="ts">
+  import Aplayer, {
+    type AplayerAudio,
+  } from "svelte-aplayer/dist/svelte/svelte-aplayer.es.js";
+  import "svelte-aplayer/dist/svelte/style.css";
 
-...
+  const audio: AplayerAudio = {
+    name: "君の知らない物語",
+    artist: "supercell",
+    cover:
+      "https://blog-static.fengkx.top/svelte-aplayer/bakemonogatari-ed.jpg",
+    url: "https://blog-static.fengkx.top/svelte-aplayer/bakemonogatari-ed.mp3",
+  };
+</script>
 
-<Aplayer audio={
-    {name:'君の知らない物語',
-    artist: 'supercell',
-    cover: 'https://blog-static.fengkx.top/svelte-aplayer/bakemonogatari-ed.jpg',
-    url: "https://blog-static.fengkx.top/svelte-aplayer/bakemonogatari-ed.mp3"}} />
+<Aplayer {audio} />
+```
+
+Resolve asynchronous data before mounting the player:
+
+```svelte
+<script lang="ts">
+  import Aplayer, {
+    type AplayerAudio,
+  } from "svelte-aplayer/dist/svelte/svelte-aplayer.es.js";
+
+  const audioPromise: Promise<AplayerAudio> = getSong();
+</script>
+
+{#await audioPromise}
+  <p>Loading...</p>
+{:then audio}
+  <Aplayer {audio} />
+{:catch error}
+  <p>Failed to load audio: {error.message}</p>
+{/await}
 ```
 
 ## Options

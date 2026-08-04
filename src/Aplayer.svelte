@@ -20,6 +20,7 @@
   import { progressEventHandlers } from "./lib/progress-handlers";
   import { onDestroy, onMount, createEventDispatcher } from "svelte";
   import { propsBool, isMobile } from "./lib/utils";
+  import type { AplayerAudioInput } from "./types";
 
   import {
     soundUnmuted,
@@ -63,7 +64,8 @@
   player.addEventListener("pause", () => {
     paused = true;
   });
-  export let audio: any[] | string;
+  // JSON strings are supported by the custom element build only.
+  export let audio: AplayerAudioInput | string;
   export let order = $controlState.order;
   export let loop = $controlState.loop;
   export let volume = $controlState.volume;

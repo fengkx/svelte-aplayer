@@ -64,10 +64,9 @@ export function propsBool(props: Record<string, any>, key: string) {
 
 declare global {
   var SVELTE_APLAYER_VERSION: string;
-  var GIT_HASH: string;
 }
 
-/* global SVELTE_APLAYER_VERSION GIT_HASH */
+/* global SVELTE_APLAYER_VERSION */
 console.log(
   `${"\n"} %c Svelte APlayer v${SVELTE_APLAYER_VERSION} %c http://svelte-aplayer.js.org${"\n"}${"\n"}`,
   "color: #fff; background: #ff3e00; padding:5px 0;",

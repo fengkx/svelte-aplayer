@@ -35,5 +35,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify documentation build
+        run: git diff --exit-code -- docs
+
       - name: Publish preview package
         run: npm exec -- pkg-pr-new publish --previewVersion --commentWithSha

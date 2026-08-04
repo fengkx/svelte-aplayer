@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Svelte APlayer demo using the Web Component build"
+    />
+    <title>Svelte APlayer · Web Component</title>
+  </head>
+  <body>
+    <main class="demo-shell">
+      <header class="demo-header">
+        <span class="badge">Web Component</span>
+        <h1>Svelte APlayer</h1>
+        <p>Built directly from the latest source with Vite.</p>
+        <nav class="demo-nav" aria-label="Demo versions">
+          <a href="../svelte/">Svelte</a>
+          <a href="../web-component/" aria-current="page">Web Component</a>
+          <a href="https://github.com/fengkx/svelte-aplayer">GitHub</a>
+        </nav>
+      </header>
+
+      <div class="demo-grid">
+        <section class="demo-card">
+          <h2>Playlist</h2>
+          <div class="player-frame">
+            <s-aplayer id="playlist-player" list_max_height="320"></s-aplayer>
+          </div>
+        </section>
+
+        <section class="demo-card">
+          <h2>Mini player</h2>
+          <div class="player-frame">
+            <s-aplayer id="mini-player" mini="true"></s-aplayer>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

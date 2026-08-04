@@ -33,6 +33,8 @@
     "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.svelte",
+    "demo/**/*.ts",
+    "demo/**/*.svelte",
     "tests/**/*.ts",
     "playwright.config.ts"
   ]

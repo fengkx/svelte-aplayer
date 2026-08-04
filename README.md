@@ -21,10 +21,11 @@ Drawback: Due to the limitaion of custom element, Instead of use object in the p
 npm i svelte-aplayer
 ```
 
-Using in webcomponent
-[Example](https://svelte-aplayer.js.org)
+Using in Web Component: [example](https://svelte-aplayer.js.org/web-component/)
 
-Using in Svelte
+Using in Svelte: [example](https://svelte-aplayer.js.org/svelte/)
+
+### Svelte usage
 
 ```svelte
 <script lang="ts">

@@ -534,6 +534,7 @@
       }
       .aplayer-button {
         position: absolute;
+        box-sizing: content-box;
         border-radius: 50%;
         opacity: 0.8;
         text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
@@ -556,7 +557,7 @@
         width: 16px;
         height: 16px;
         border: 2px solid #fff;
-        bottom: 4px;
+        bottom: 0;
         right: 4px;
         svg {
           position: absolute;

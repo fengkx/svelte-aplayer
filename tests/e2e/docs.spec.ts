@@ -1,11 +1,5 @@
 import { expect, test } from "@playwright/test";
-
-const demoModes = [
-  "Playlist",
-  "Single track with lyrics",
-  "Single track",
-  "Mini player",
-];
+import { demoModes, expectLyricsControlsAligned } from "./docs-helpers";
 
 test("redirects the docs root to the Svelte demo", async ({ page }) => {
   await page.goto("/docs/");
@@ -28,6 +22,7 @@ test("renders the Svelte component demo", async ({ page }) => {
     "background-color",
     "rgb(255, 255, 255)"
   );
+  await expectLyricsControlsAligned(page);
 });
 
 test("renders the Web Component demo", async ({ page }) => {
@@ -45,4 +40,5 @@ test("renders the Web Component demo", async ({ page }) => {
     "background-color",
     "rgb(255, 255, 255)"
   );
+  await expectLyricsControlsAligned(page);
 });

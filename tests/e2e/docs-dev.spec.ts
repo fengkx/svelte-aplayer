@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { expectLyricsControlsAligned } from "./docs-helpers";
 
 const docsUrl = (path: string) => `http://localhost:5173${path}`;
 
@@ -8,11 +9,13 @@ test("serves both source modes from one Vite server", async ({ page }) => {
   await expect(page.locator(".demo-card")).toHaveCount(4);
   await expect(page.locator(".aplayer")).toHaveCount(4);
   await expect(page.locator("s-aplayer")).toHaveCount(0);
+  await expectLyricsControlsAligned(page);
 
   await page.goto(docsUrl("/web-component/"));
   await expect(page.locator(".demo-card")).toHaveCount(4);
   await expect(page.locator("s-aplayer")).toHaveCount(4);
   await expect(page.locator(".aplayer")).toHaveCount(4);
+  await expectLyricsControlsAligned(page);
   const haveShadowRoots = await page
     .locator("s-aplayer")
     .evaluateAll((players) =>

@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { demoModes, expectLyricsControlsAligned } from "./docs-helpers";
+import {
+  demoModes,
+  expectLyricsControlsAligned,
+  expectRelevantOrderControls,
+} from "./docs-helpers";
 
 test("redirects the docs root to the Svelte demo", async ({ page }) => {
   await page.goto("/docs/");
@@ -23,6 +27,7 @@ test("renders the Svelte component demo", async ({ page }) => {
     "rgb(255, 255, 255)"
   );
   await expectLyricsControlsAligned(page);
+  await expectRelevantOrderControls(page);
 });
 
 test("renders the Web Component demo", async ({ page }) => {
@@ -41,4 +46,5 @@ test("renders the Web Component demo", async ({ page }) => {
     "rgb(255, 255, 255)"
   );
   await expectLyricsControlsAligned(page);
+  await expectRelevantOrderControls(page);
 });

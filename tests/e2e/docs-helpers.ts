@@ -27,3 +27,14 @@ export const expectLyricsControlsAligned = async (page: Page) => {
 
   expect(alignmentOffset).toBeLessThanOrEqual(1);
 };
+
+export const expectRelevantOrderControls = async (page: Page) => {
+  await expect(
+    page.locator('[data-mode="playlist"] .aplayer-icon-order')
+  ).toHaveCount(1);
+  await expect(
+    page.locator(
+      '[data-mode="lyrics"] .aplayer-icon-order, [data-mode="single"] .aplayer-icon-order, [data-mode="mini"] .aplayer-icon-order'
+    )
+  ).toHaveCount(0);
+};

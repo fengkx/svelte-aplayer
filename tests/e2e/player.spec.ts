@@ -149,14 +149,26 @@ test("caps a long playlist at the configured maximum height", async ({
     .toEqual({ clientHeight: 64, isScrollable: true });
 });
 
-test("omits playlist controls for a single track", async ({ page }) => {
+test("shows playlist controls only when multiple tracks are available", async ({
+  page,
+}) => {
   await page.goto("/tests/e2e/fixture.html?single");
 
   const player = page.locator("s-aplayer");
   await expect(player.locator(".aplayer-title")).toHaveText("First Song");
   await expect(player.locator(".aplayer")).not.toHaveClass(/aplayer-withlist/);
+  await expect(player.locator(".aplayer-icon-order")).toHaveCount(0);
   await expect(player.locator(".aplayer-icon-menu")).toHaveCount(0);
+  await expect(player.locator(".aplayer-icon-loop")).toHaveCount(1);
   await expect(player.locator(".aplayer-list")).toHaveCSS("display", "none");
+
+  await page.evaluate(() => {
+    const { player, replacementTracks } = (window as TestWindow).testHarness;
+    player.setAttribute("audio", JSON.stringify(replacementTracks));
+  });
+
+  await expect(player.locator(".aplayer-icon-order")).toHaveCount(1);
+  await expect(player.locator(".aplayer-icon-menu")).toHaveCount(1);
 });
 
 test("keeps the list expanded when list_folded is the string false", async ({

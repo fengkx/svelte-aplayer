@@ -380,20 +380,22 @@
               </div>
             </div>
           </div>
-          <button
-            type="button"
-            class="aplayer-icon aplayer-icon-order"
-            on:click={() => {
-              $controlState.order =
-                $controlState.order === "list" ? "random" : "list";
-            }}
-          >
-            {#if $controlState.order === "random"}
-              {@html randomOrder}
-            {:else}
-              {@html listOrder}
-            {/if}
-          </button>
+          {#if $audioList.length > 1}
+            <button
+              type="button"
+              class="aplayer-icon aplayer-icon-order"
+              on:click={() => {
+                $controlState.order =
+                  $controlState.order === "list" ? "random" : "list";
+              }}
+            >
+              {#if $controlState.order === "random"}
+                {@html randomOrder}
+              {:else}
+                {@html listOrder}
+              {/if}
+            </button>
+          {/if}
           <button
             type="button"
             class="aplayer-icon aplayer-icon-loop"

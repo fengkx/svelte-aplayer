@@ -2613,10 +2613,10 @@ function Ai(e, t) {
 }
 //#endregion
 //#region src/assets/svg.ts
-var ji = "<svg\n                  xmlns=\"http://www.w3.org/2000/svg\"\n                  version=\"1.1\"\n                  viewBox=\"0 0 28 32\"\n                  ><path\n                    d=\"M13.728 6.272v19.456q0 0.448-0.352 0.8t-0.8 0.32-0.8-0.32l-5.952-5.952h-4.672q-0.48 0-0.8-0.352t-0.352-0.8v-6.848q0-0.48 0.352-0.8t0.8-0.352h4.672l5.952-5.952q0.32-0.32 0.8-0.32t0.8 0.32 0.352 0.8zM20.576 16q0 1.344-0.768 2.528t-2.016 1.664q-0.16 0.096-0.448 0.096-0.448 0-0.8-0.32t-0.32-0.832q0-0.384 0.192-0.64t0.544-0.448 0.608-0.384 0.512-0.64 0.192-1.024-0.192-1.024-0.512-0.64-0.608-0.384-0.544-0.448-0.192-0.64q0-0.48 0.32-0.832t0.8-0.32q0.288 0 0.448 0.096 1.248 0.48 2.016 1.664t0.768 2.528z\"\n                  /></svg\n        >", Mi = "<svg\n                  xmlns=\"http://www.w3.org/2000/svg\"\n                  version=\"1.1\"\n                  viewBox=\"0 0 28 32\"\n                  ><path\n                    d=\"M13.728 6.272v19.456q0 0.448-0.352 0.8t-0.8 0.32-0.8-0.32l-5.952-5.952h-4.672q-0.48 0-0.8-0.352t-0.352-0.8v-6.848q0-0.48 0.352-0.8t0.8-0.352h4.672l5.952-5.952q0.32-0.32 0.8-0.32t0.8 0.32 0.352 0.8z\"\n                  /></svg\n                >", Ni = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 32 32\"\n                ><path\n                  d=\"M22.667 4l7 6-7 6 7 6-7 6v-4h-3.653l-3.76-3.76 2.827-2.827 2.587 2.587h2v-8h-2l-12 12h-6v-4h4.347l12-12h3.653v-4zM2.667 8h6l3.76 3.76-2.827 2.827-2.587-2.587h-4.347v-4z\"\n                /></svg\n              >", Pi = "<svg\n                    xmlns=\"http://www.w3.org/2000/svg\"\n                    version=\"1.1\"\n                    viewBox=\"0 0 32 32\"\n                    ><path\n                      d=\"M4 16c0-6.6 5.4-12 12-12s12 5.4 12 12c0 1.2-0.8 2-2 2s-2-0.8-2-2c0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8c1.2 0 2 0.8 2 2s-0.8 2-2 2c-6.6 0-12-5.4-12-12z\"\n                    /></svg\n                  >", Fi = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 32 32\"\n                ><path\n                  d=\"M0.622 18.334h19.54v7.55l11.052-9.412-11.052-9.413v7.549h-19.54v3.725z\"\n                /></svg\n              >", Ii = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 33 32\"\n                ><path\n                  d=\"M9.333 9.333h13.333v4l5.333-5.333-5.333-5.333v4h-16v8h2.667v-5.333zM22.667 22.667h-13.333v-4l-5.333 5.333 5.333 5.333v-4h16v-8h-2.667v5.333zM17.333 20v-8h-1.333l-2.667 1.333v1.333h2v5.333h2z\"\n                /></svg\n              >", Li = " <svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 29 32\"\n                ><path\n                  d=\"M9.333 9.333h13.333v4l5.333-5.333-5.333-5.333v4h-16v8h2.667v-5.333zM22.667 22.667h-13.333v-4l-5.333 5.333 5.333 5.333v-4h16v-8h-2.667v5.333z\"\n                /></svg\n              >", Ri = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 29 32\"\n                ><path\n                  d=\"M2.667 7.027l1.707-1.693 22.293 22.293-1.693 1.707-4-4h-11.64v4l-5.333-5.333 5.333-5.333v4h8.973l-8.973-8.973v0.973h-2.667v-3.64l-4-4zM22.667 17.333h2.667v5.573l-2.667-2.667v-2.907zM22.667 6.667v-4l5.333 5.333-5.333 5.333v-4h-10.907l-2.667-2.667h13.573z\"\n                /></svg\n              >", zi = /* @__PURE__ */ Er("<div class=\"aplayer-button aplayer-pause svelte-es3fdp\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 17 32\" class=\"svelte-es3fdp\"><path d=\"M14.080 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048zM2.88 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048z\" class=\"svelte-es3fdp\"></path></svg></div>"), Bi = /* @__PURE__ */ Er("<div class=\"aplayer-button aplayer-play svelte-es3fdp\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 16 31\" class=\"svelte-es3fdp\"><path d=\"M15.552 15.168q0.448 0.32 0.448 0.832 0 0.448-0.448 0.768l-13.696 8.512q-0.768 0.512-1.312 0.192t-0.544-1.28v-16.448q0-0.96 0.544-1.28t1.312 0.192z\" class=\"svelte-es3fdp\"></path></svg></div>"), Vi = /* @__PURE__ */ Er("<p> </p>"), Hi = /* @__PURE__ */ Er("<div class=\"aplayer-lrc svelte-es3fdp\"><div class=\"aplayer-lrc-contents svelte-es3fdp\"></div></div>"), Ui = /* @__PURE__ */ Er("<button type=\"button\" class=\"aplayer-icon aplayer-icon-menu svelte-es3fdp\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 22 32\" class=\"svelte-es3fdp\"><path d=\"M20.8 14.4q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2zM1.6 11.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2zM20.8 20.8q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2z\" class=\"svelte-es3fdp\"></path></svg></button>"), Wi = /* @__PURE__ */ Er("<span class=\"aplayer-list-cur svelte-es3fdp\"></span>"), Gi = /* @__PURE__ */ Er("<li class=\"svelte-es3fdp\"><!> <span class=\"aplayer-list-index svelte-es3fdp\"></span> <span class=\"aplayer-list-title svelte-es3fdp\"> </span> <span class=\"aplayer-list-artist svelte-es3fdp\"> </span></li>"), Ki = /* @__PURE__ */ Er("<div><div class=\"aplayer-body svelte-es3fdp\"><div class=\"aplayer-pic svelte-es3fdp\"><!></div> <div class=\"aplayer-info svelte-es3fdp\"><div class=\"aplayer-music svelte-es3fdp\"><span class=\"aplayer-title svelte-es3fdp\"> </span> <span class=\"aplayer-artist svelte-es3fdp\"> </span></div> <!> <div class=\"aplayer-controller svelte-es3fdp\"><div class=\"aplayer-bar-wrap svelte-es3fdp\"><div class=\"aplayer-bar svelte-es3fdp\"><div class=\"aplayer-loaded svelte-es3fdp\"></div> <div class=\"aplayer-played svelte-es3fdp\"><div class=\"aplayer-thumb svelte-es3fdp\"><span class=\"aplayer-loading-icon svelte-es3fdp\"></span></div></div></div></div> <div class=\"aplayer-time svelte-es3fdp\"><span class=\"aplayer-time-inner svelte-es3fdp\"><span class=\"aplayer-ptime svelte-es3fdp\"> </span> / <span class=\"aplayer-dtime svelte-es3fdp\"> </span></span> <span hidden=\"\" class=\"svelte-es3fdp\"></span> <div class=\"aplayer-volume-wrap svelte-es3fdp\"><button type=\"button\" class=\"aplayer-icon aplayer-icon-volume-down svelte-es3fdp\"><!></button> <div class=\"aplayer-volume-bar-wrap svelte-es3fdp\"><div class=\"aplayer-volume-bar svelte-es3fdp\"><div class=\"aplayer-volume svelte-es3fdp\"></div></div></div></div> <button type=\"button\" class=\"aplayer-icon aplayer-icon-order svelte-es3fdp\"><!></button> <button type=\"button\" class=\"aplayer-icon aplayer-icon-loop svelte-es3fdp\"><!></button> <!></div></div></div> <div class=\"aplayer-list svelte-es3fdp\"><ol class=\"svelte-es3fdp\"></ol></div></div></div>");
-function qi(e, t) {
+var ji = "<svg\n                  xmlns=\"http://www.w3.org/2000/svg\"\n                  version=\"1.1\"\n                  viewBox=\"0 0 28 32\"\n                  ><path\n                    d=\"M13.728 6.272v19.456q0 0.448-0.352 0.8t-0.8 0.32-0.8-0.32l-5.952-5.952h-4.672q-0.48 0-0.8-0.352t-0.352-0.8v-6.848q0-0.48 0.352-0.8t0.8-0.352h4.672l5.952-5.952q0.32-0.32 0.8-0.32t0.8 0.32 0.352 0.8zM20.576 16q0 1.344-0.768 2.528t-2.016 1.664q-0.16 0.096-0.448 0.096-0.448 0-0.8-0.32t-0.32-0.832q0-0.384 0.192-0.64t0.544-0.448 0.608-0.384 0.512-0.64 0.192-1.024-0.192-1.024-0.512-0.64-0.608-0.384-0.544-0.448-0.192-0.64q0-0.48 0.32-0.832t0.8-0.32q0.288 0 0.448 0.096 1.248 0.48 2.016 1.664t0.768 2.528z\"\n                  /></svg\n        >", Mi = "<svg\n                  xmlns=\"http://www.w3.org/2000/svg\"\n                  version=\"1.1\"\n                  viewBox=\"0 0 28 32\"\n                  ><path\n                    d=\"M13.728 6.272v19.456q0 0.448-0.352 0.8t-0.8 0.32-0.8-0.32l-5.952-5.952h-4.672q-0.48 0-0.8-0.352t-0.352-0.8v-6.848q0-0.48 0.352-0.8t0.8-0.352h4.672l5.952-5.952q0.32-0.32 0.8-0.32t0.8 0.32 0.352 0.8z\"\n                  /></svg\n                >", Ni = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 32 32\"\n                ><path\n                  d=\"M22.667 4l7 6-7 6 7 6-7 6v-4h-3.653l-3.76-3.76 2.827-2.827 2.587 2.587h2v-8h-2l-12 12h-6v-4h4.347l12-12h3.653v-4zM2.667 8h6l3.76 3.76-2.827 2.827-2.587-2.587h-4.347v-4z\"\n                /></svg\n              >", Pi = "<svg\n                    xmlns=\"http://www.w3.org/2000/svg\"\n                    version=\"1.1\"\n                    viewBox=\"0 0 32 32\"\n                    ><path\n                      d=\"M4 16c0-6.6 5.4-12 12-12s12 5.4 12 12c0 1.2-0.8 2-2 2s-2-0.8-2-2c0-4.4-3.6-8-8-8s-8 3.6-8 8 3.6 8 8 8c1.2 0 2 0.8 2 2s-0.8 2-2 2c-6.6 0-12-5.4-12-12z\"\n                    /></svg\n                  >", Fi = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 32 32\"\n                ><path\n                  d=\"M0.622 18.334h19.54v7.55l11.052-9.412-11.052-9.413v7.549h-19.54v3.725z\"\n                /></svg\n              >", Ii = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 33 32\"\n                ><path\n                  d=\"M9.333 9.333h13.333v4l5.333-5.333-5.333-5.333v4h-16v8h2.667v-5.333zM22.667 22.667h-13.333v-4l-5.333 5.333 5.333 5.333v-4h16v-8h-2.667v5.333zM17.333 20v-8h-1.333l-2.667 1.333v1.333h2v5.333h2z\"\n                /></svg\n              >", Li = " <svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 29 32\"\n                ><path\n                  d=\"M9.333 9.333h13.333v4l5.333-5.333-5.333-5.333v4h-16v8h2.667v-5.333zM22.667 22.667h-13.333v-4l-5.333 5.333 5.333 5.333v-4h16v-8h-2.667v5.333z\"\n                /></svg\n              >", Ri = "<svg\n                xmlns=\"http://www.w3.org/2000/svg\"\n                version=\"1.1\"\n                viewBox=\"0 0 29 32\"\n                ><path\n                  d=\"M2.667 7.027l1.707-1.693 22.293 22.293-1.693 1.707-4-4h-11.64v4l-5.333-5.333 5.333-5.333v4h8.973l-8.973-8.973v0.973h-2.667v-3.64l-4-4zM22.667 17.333h2.667v5.573l-2.667-2.667v-2.907zM22.667 6.667v-4l5.333 5.333-5.333 5.333v-4h-10.907l-2.667-2.667h13.573z\"\n                /></svg\n              >", zi = /* @__PURE__ */ Er("<div class=\"aplayer-button aplayer-pause svelte-es3fdp\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 17 32\" class=\"svelte-es3fdp\"><path d=\"M14.080 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048zM2.88 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048z\" class=\"svelte-es3fdp\"></path></svg></div>"), Bi = /* @__PURE__ */ Er("<div class=\"aplayer-button aplayer-play svelte-es3fdp\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 16 31\" class=\"svelte-es3fdp\"><path d=\"M15.552 15.168q0.448 0.32 0.448 0.832 0 0.448-0.448 0.768l-13.696 8.512q-0.768 0.512-1.312 0.192t-0.544-1.28v-16.448q0-0.96 0.544-1.28t1.312 0.192z\" class=\"svelte-es3fdp\"></path></svg></div>"), Vi = /* @__PURE__ */ Er("<p> </p>"), Hi = /* @__PURE__ */ Er("<div class=\"aplayer-lrc svelte-es3fdp\"><div class=\"aplayer-lrc-contents svelte-es3fdp\"></div></div>"), Ui = /* @__PURE__ */ Er("<button type=\"button\" class=\"aplayer-icon aplayer-icon-order svelte-es3fdp\"><!></button>"), Wi = /* @__PURE__ */ Er("<button type=\"button\" class=\"aplayer-icon aplayer-icon-menu svelte-es3fdp\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 22 32\" class=\"svelte-es3fdp\"><path d=\"M20.8 14.4q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2zM1.6 11.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2zM20.8 20.8q0.704 0 1.152 0.48t0.448 1.12-0.48 1.12-1.12 0.48h-19.2q-0.64 0-1.12-0.48t-0.48-1.12 0.448-1.12 1.152-0.48h19.2z\" class=\"svelte-es3fdp\"></path></svg></button>"), Gi = /* @__PURE__ */ Er("<span class=\"aplayer-list-cur svelte-es3fdp\"></span>"), Ki = /* @__PURE__ */ Er("<li class=\"svelte-es3fdp\"><!> <span class=\"aplayer-list-index svelte-es3fdp\"></span> <span class=\"aplayer-list-title svelte-es3fdp\"> </span> <span class=\"aplayer-list-artist svelte-es3fdp\"> </span></li>"), qi = /* @__PURE__ */ Er("<div><div class=\"aplayer-body svelte-es3fdp\"><div class=\"aplayer-pic svelte-es3fdp\"><!></div> <div class=\"aplayer-info svelte-es3fdp\"><div class=\"aplayer-music svelte-es3fdp\"><span class=\"aplayer-title svelte-es3fdp\"> </span> <span class=\"aplayer-artist svelte-es3fdp\"> </span></div> <!> <div class=\"aplayer-controller svelte-es3fdp\"><div class=\"aplayer-bar-wrap svelte-es3fdp\"><div class=\"aplayer-bar svelte-es3fdp\"><div class=\"aplayer-loaded svelte-es3fdp\"></div> <div class=\"aplayer-played svelte-es3fdp\"><div class=\"aplayer-thumb svelte-es3fdp\"><span class=\"aplayer-loading-icon svelte-es3fdp\"></span></div></div></div></div> <div class=\"aplayer-time svelte-es3fdp\"><span class=\"aplayer-time-inner svelte-es3fdp\"><span class=\"aplayer-ptime svelte-es3fdp\"> </span> / <span class=\"aplayer-dtime svelte-es3fdp\"> </span></span> <span hidden=\"\" class=\"svelte-es3fdp\"></span> <div class=\"aplayer-volume-wrap svelte-es3fdp\"><button type=\"button\" class=\"aplayer-icon aplayer-icon-volume-down svelte-es3fdp\"><!></button> <div class=\"aplayer-volume-bar-wrap svelte-es3fdp\"><div class=\"aplayer-volume-bar svelte-es3fdp\"><div class=\"aplayer-volume svelte-es3fdp\"></div></div></div></div> <!> <button type=\"button\" class=\"aplayer-icon aplayer-icon-loop svelte-es3fdp\"><!></button> <!></div></div></div> <div class=\"aplayer-list svelte-es3fdp\"><ol class=\"svelte-es3fdp\"></ol></div></div></div>");
+function Ji(e, t) {
 	if (new.target) return Lr({
-		component: qi,
+		component: Ji,
 		...e
 	});
 	let n = vi(t, [
@@ -2784,7 +2784,7 @@ function qi(e, t) {
 		$on: (e, n) => hi(t, e, n)
 	};
 	pi();
-	var ze = Ki();
+	var ze = qi();
 	let Be;
 	var Ve = F(ze), He = F(Ve), D = F(He), Ue = (e) => {
 		$(e, zi());
@@ -2830,42 +2830,49 @@ function qi(e, t) {
 	}), A(st);
 	var R = I(st, 2), dt = F(R), ft = F(dt);
 	A(dt), fi(dt, (e) => H(ke, e), () => J(ke)), A(R), A(L);
-	var pt = I(L, 2), mt = F(pt), ht = (e) => {
-		var t = Dr();
-		ni($e(t), () => Ni), $(e, t);
-	}, gt = (e) => {
-		var t = Dr();
-		ni($e(t), () => Fi), $(e, t);
+	var pt = I(L, 2), mt = (e) => {
+		var t = Ui(), n = F(t), i = (e) => {
+			var t = Dr();
+			ni($e(t), () => Ni), $(e, t);
+		}, a = (e) => {
+			var t = Dr();
+			ni($e(t), () => Fi), $(e, t);
+		};
+		Gr(n, (e) => {
+			r(), Y(() => r().order === "random") ? e(i) : e(a, -1);
+		}), A(t), Q("click", t, () => {
+			z(w, Y(r).order = r().order === "list" ? "random" : "list", Y(r));
+		}), $(e, t);
 	};
-	Gr(mt, (e) => {
-		r(), Y(() => r().order === "random") ? e(ht) : e(gt, -1);
-	}), A(pt);
-	var _t = I(pt, 2), xt = F(_t), St = (e) => {
+	Gr(pt, (e) => {
+		a(), Y(() => a().length > 1) && e(mt);
+	});
+	var ht = I(pt, 2), gt = F(ht), _t = (e) => {
 		var t = Dr();
 		ni($e(t), () => Ri), $(e, t);
-	}, Ct = (e) => {
+	}, xt = (e) => {
 		var t = Dr();
 		ni($e(t), () => Ii), $(e, t);
-	}, wt = (e) => {
+	}, St = (e) => {
 		var t = Dr();
 		ni($e(t), () => Li), $(e, t);
 	};
-	Gr(xt, (e) => {
-		r(), Y(() => r().loop === "none") ? e(St) : (r(), Y(() => r().loop === "one") ? e(Ct, 1) : (r(), Y(() => r().loop === "all") && e(wt, 2)));
-	}), A(_t);
-	var Tt = I(_t, 2), Et = (e) => {
-		var t = Ui();
+	Gr(gt, (e) => {
+		r(), Y(() => r().loop === "none") ? e(_t) : (r(), Y(() => r().loop === "one") ? e(xt, 1) : (r(), Y(() => r().loop === "all") && e(St, 2)));
+	}), A(ht);
+	var Ct = I(ht, 2), wt = (e) => {
+		var t = Wi();
 		Q("click", t, () => {
 			z(w, Y(r).showList = !r().showList, Y(r)), r().showList ? te("listshow") : te("listhide");
 		}), $(e, t);
 	};
-	Gr(Tt, (e) => {
-		a(), Y(() => a().length > 1) && e(Et);
+	Gr(Ct, (e) => {
+		a(), Y(() => a().length > 1) && e(wt);
 	}), A(tt), A(Ze), A(k);
-	var Dt = I(k, 2), Ot = F(Dt);
-	Xr(Ot, 5, a, Kr, (e, t, n) => {
-		var r = Gi(), a = F(r), o = (e) => {
-			$(e, Wi());
+	var Tt = I(k, 2), Et = F(Tt);
+	Xr(Et, 5, a, Kr, (e, t, n) => {
+		var r = Ki(), a = F(r), o = (e) => {
+			$(e, Gi());
 		};
 		Gr(a, (e) => {
 			i(), Y(() => n === i().playingIndex) && e(o);
@@ -2880,13 +2887,13 @@ function qi(e, t) {
 		}), Q("click", r, () => {
 			z(C, Y(i).playingIndex = n, Y(i)), pn(S, J(S).currentTime = 0);
 		}), $(e, r);
-	}), A(Ot), A(Dt), fi(Dt, (e) => H(Le, e), () => J(Le)), A(Ve), A(ze), fi(ze, (e) => H(y, e), () => J(y)), rr(() => {
+	}), A(Et), A(Tt), fi(Tt, (e) => H(Le, e), () => J(Le)), A(Ve), A(ze), fi(ze, (e) => H(y, e), () => J(y)), rr(() => {
 		Be = ci(ze, 1, "aplayer svelte-es3fdp", null, Be, {
 			"aplayer-withlrc": s().length > 0,
 			"aplayer-withlist": a().length > 1,
 			"aplayer-narrow": _e(),
 			"aplayer-mobile": xi
-		}), ui(He, `background-image: url( ${(o(), Y(() => o().cover)) ?? ""} )`), Ar(Ke, (o(), Y(() => o().name))), Ar(Je, (o(), Y(() => o().artist))), ui(M, `width: ${(c(), Y(() => c().bufferPercentage)) ?? ""}`), ui(N, `width: ${(l(), Y(() => l().playPercentage)) ?? ""}`), ui(et, `display: ${u() ? "inline" : "none"}`), Ar(it, (l(), Y(() => l().ptime))), Ar(ot, (l(), Y(() => l().duration))), ui(ft, `height: ${(J(S), d(), Y(() => J(S).muted ? "0px" : d().volumePercentage)) ?? ""}`), ui(Dt, `height: ${(r(), J(g), Y(() => r().showList ? `${J(g)}px` : "0px")) ?? ""}`);
+		}), ui(He, `background-image: url( ${(o(), Y(() => o().cover)) ?? ""} )`), Ar(Ke, (o(), Y(() => o().name))), Ar(Je, (o(), Y(() => o().artist))), ui(M, `width: ${(c(), Y(() => c().bufferPercentage)) ?? ""}`), ui(N, `width: ${(l(), Y(() => l().playPercentage)) ?? ""}`), ui(et, `display: ${u() ? "inline" : "none"}`), Ar(it, (l(), Y(() => l().ptime))), Ar(ot, (l(), Y(() => l().duration))), ui(ft, `height: ${(J(S), d(), Y(() => J(S).muted ? "0px" : d().volumePercentage)) ?? ""}`), ui(Tt, `height: ${(r(), J(g), Y(() => r().showList ? `${J(g)}px` : "0px")) ?? ""}`);
 	}), Q("click", He, () => {
 		J(fe) ? Te() : J(S).pause();
 	}), Q("mousedown", j, function(...e) {
@@ -2919,16 +2926,14 @@ function qi(e, t) {
 		J(je)?.apply(this, e);
 	}), Q("touchend", R, function(...e) {
 		J(E)?.apply(this, e);
-	}), Q("click", pt, () => {
-		z(w, Y(r).order = r().order === "list" ? "random" : "list", Y(r));
-	}), Q("click", _t, () => {
+	}), Q("click", ht, () => {
 		r().loop === "all" ? z(w, Y(r).loop = "one", Y(r)) : r().loop === "one" ? z(w, Y(r).loop = "none", Y(r)) : r().loop === "none" && z(w, Y(r).loop = "all", Y(r));
 	}), $(e, ze);
-	var kt = Pe(Re);
-	return p(), kt;
+	var Dt = Pe(Re);
+	return p(), Dt;
 }
 //#endregion
 //#region src/main.ts
-var Ji = qi;
+var Yi = Ji;
 //#endregion
-export { Ji as default };
+export { Yi as default };

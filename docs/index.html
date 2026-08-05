@@ -2,78 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Choose a Svelte APlayer demo implementation"
-    />
-    <title>Svelte APlayer demos</title>
-    <style>
-      :root {
-        color: #242424;
-        background: #fff;
-        font-family:
-          Inter,
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        display: grid;
-        min-height: 100vh;
-        margin: 0;
-        place-items: center;
-      }
-      main {
-        width: min(760px, calc(100% - 32px));
-        text-align: center;
-      }
-      h1 {
-        margin: 0 0 12px;
-        font-size: clamp(2.5rem, 9vw, 5rem);
-      }
-      p {
-        color: #666;
-      }
-      nav {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin-top: 36px;
-      }
-      a {
-        padding: 28px 20px;
-        border: 1px solid #e5e5e5;
-        border-radius: 8px;
-        color: inherit;
-        font-size: 1.15rem;
-        font-weight: 700;
-        text-decoration: none;
-      }
-      a:hover {
-        border-color: #888;
-      }
-      @media (max-width: 560px) {
-        nav {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <meta http-equiv="refresh" content="0; url=./svelte/" />
+    <link rel="canonical" href="./svelte/" />
+    <title>Redirecting to Svelte APlayer demo</title>
+    <script>
+      window.location.replace(
+        `./svelte/${window.location.search}${window.location.hash}`
+      );
+    </script>
   </head>
   <body>
-    <main>
-      <h1>Svelte APlayer</h1>
-      <p>Both demos are built from the latest repository source with Vite.</p>
-      <nav aria-label="Demo versions">
-        <a href="./svelte/">Svelte component</a>
-        <a href="./web-component/">Web Component</a>
-      </nav>
-    </main>
+    <a href="./svelte/">Continue to the Svelte APlayer demo</a>
   </body>
 </html>

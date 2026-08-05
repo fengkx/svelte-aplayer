@@ -49,9 +49,11 @@ const svelteComponentMode = (mirrorSource) => ({
 const docsPaths = () => ({
   name: "docs-paths",
   configureServer(server) {
-    server.middlewares.use((request, _response, next) => {
+    server.middlewares.use((request, response, next) => {
       if (request.url === "/" || request.url?.startsWith("/?")) {
-        request.url = `/docs/index.html${request.url.slice(1)}`;
+        response.writeHead(302, { Location: "/svelte/" });
+        response.end();
+        return;
       } else if (request.url?.startsWith("/svelte/")) {
         request.url = `/demo${request.url}`;
       } else if (request.url?.startsWith("/web-component/")) {

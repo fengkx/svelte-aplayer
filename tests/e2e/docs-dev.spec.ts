@@ -4,14 +4,7 @@ const docsUrl = (path: string) => `http://localhost:5173${path}`;
 
 test("serves both source modes from one Vite server", async ({ page }) => {
   await page.goto(docsUrl("/"));
-  await expect(
-    page.getByRole("link", { name: "Svelte component" })
-  ).toHaveAttribute("href", "./svelte/");
-  await expect(
-    page.getByRole("link", { name: "Web Component" })
-  ).toHaveAttribute("href", "./web-component/");
-
-  await page.goto(docsUrl("/svelte/"));
+  await expect(page).toHaveURL(docsUrl("/svelte/"));
   await expect(page.locator(".demo-card")).toHaveCount(4);
   await expect(page.locator(".aplayer")).toHaveCount(4);
   await expect(page.locator("s-aplayer")).toHaveCount(0);

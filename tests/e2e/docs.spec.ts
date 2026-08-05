@@ -7,19 +7,11 @@ const demoModes = [
   "Mini player",
 ];
 
-test("links to both source-built demo versions", async ({ page }) => {
+test("redirects the docs root to the Svelte demo", async ({ page }) => {
   await page.goto("/docs/");
 
-  await expect(
-    page.getByRole("link", { name: "Svelte component" })
-  ).toHaveAttribute("href", "./svelte/");
-  await expect(
-    page.getByRole("link", { name: "Web Component" })
-  ).toHaveAttribute("href", "./web-component/");
-  await expect(page.locator("html")).toHaveCSS(
-    "background-color",
-    "rgb(255, 255, 255)"
-  );
+  await expect(page).toHaveURL(/\/docs\/svelte\/$/);
+  await expect(page.locator(".badge")).toHaveText("Svelte component");
 });
 
 test("renders the Svelte component demo", async ({ page }) => {

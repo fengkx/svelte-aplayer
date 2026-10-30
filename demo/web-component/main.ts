@@ -1,15 +1,18 @@
 import "../../src/main";
+import type { AplayerAudioInput } from "../../src/types";
 import { tracks } from "../tracks";
 import "../demo.css";
 
-const setAudio = (selector: string, audio: unknown) => {
-  const player = document.querySelector(selector);
+const setAudio = (selector: string, audio: AplayerAudioInput) => {
+  const player = document.querySelector<
+    HTMLElement & { audio?: AplayerAudioInput }
+  >(selector);
 
   if (!player) {
     throw new Error(`Missing player: ${selector}`);
   }
 
-  player.setAttribute("audio", JSON.stringify(audio));
+  player.audio = audio;
 };
 
 setAudio("#playlist-player", tracks);

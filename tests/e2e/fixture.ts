@@ -99,7 +99,11 @@ const createPlayer = (
   playerIndex: number
 ) => {
   const player = document.createElement("s-aplayer");
-  player.setAttribute("audio", JSON.stringify(playerTracks));
+  if (parameters.has("property")) {
+    Object.assign(player, { audio: playerTracks });
+  } else if (!parameters.has("empty")) {
+    player.setAttribute("audio", JSON.stringify(playerTracks));
+  }
   player.setAttribute(
     "base_font_size",
     parameters.get("base_font_size") ?? "14"

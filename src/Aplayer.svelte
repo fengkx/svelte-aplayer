@@ -18,9 +18,9 @@
   import { createStore, instances } from "./lib/store";
   import { volumeEventHandlers } from "./lib/volume-handler";
   import { progressEventHandlers } from "./lib/progress-handlers";
-  import { onDestroy, onMount, createEventDispatcher } from "svelte";
-  import { propsBool, isMobile } from "./lib/utils";
-  import type { AplayerAudioInput } from "./types";
+  import { onDestroy, onMount, tick, createEventDispatcher } from "svelte";
+  import { propsBool, isMobile, secondToTime } from "./lib/utils";
+  import type { AplayerAudio, AplayerAudioInput } from "./types";
 
   import {
     soundUnmuted,
@@ -58,6 +58,7 @@
     volumeState,
   } = createStore(dispatch);
   let paused = player.paused;
+  let muted = player.muted;
   player.addEventListener("play", () => {
     paused = false;
   });
@@ -65,7 +66,7 @@
     paused = true;
   });
   // JSON strings are supported by the custom element build only.
-  export let audio: AplayerAudioInput | string;
+  export let audio: AplayerAudioInput | string | null | undefined = undefined;
   export let order = $controlState.order;
   export let loop = $controlState.loop;
   export let volume = $controlState.volume;
@@ -76,19 +77,18 @@
   export let list_max_height: number = Infinity;
   let playLock: boolean | undefined; // whether call play when player.src changed
   let audioPropInited: boolean = false;
-  $: {
-    // lock play when audio attr change
-    audio;
-    if (audioPropInited) {
-      playLock = true;
-    } else {
-      playLock = !autoplay;
-    }
-    audioPropInited = true;
-  }
-
+  let skipTime: ReturnType<typeof setTimeout> | undefined;
   $: parsedAudio = typeof audio === "string" ? JSON.parse(audio) : audio;
-  $: $playList.audio = Array.isArray(parsedAudio) ? parsedAudio : [parsedAudio];
+  const replaceAudio = (input: AplayerAudioInput | null | undefined) => {
+    const tracks = input == null ? [] : Array.isArray(input) ? input : [input];
+    clearTimeout(skipTime);
+    // Only the first non-empty assignment can trigger autoplay.
+    playLock = audioPropInited || !autoplay;
+    if (tracks.length > 0) audioPropInited = true;
+    // Replace the list and its index atomically, including when clearing it.
+    $playList = { audio: tracks, playingIndex: 0 };
+  };
+  $: replaceAudio(parsedAudio);
   $: initShowList = !propsBool($$props, "list_folded") && $audioList.length > 1;
   $: $controlState.showList = initShowList;
   $: $controlState.loop = loop;
@@ -98,9 +98,17 @@
     playListElement?.scrollHeight ?? 0,
     list_max_height
   );
+  $: {
+    $audioList;
+    tick().then(() => {
+      playerListHeight = Math.min(
+        playListElement?.scrollHeight ?? 0,
+        list_max_height
+      );
+    });
+  }
   $: player.volume = volume;
-  $: player.src = $currentSong.url; // player will pause everytime when its src change
-  $: themeColor = $currentSong.theme ?? theme;
+  $: themeColor = $currentSong?.theme ?? theme;
   export let base_font_size = "12";
   $: baseFontSize = (String(base_font_size).match(/^\d+/)?.[0] ?? "12") + "px";
   $: {
@@ -110,6 +118,7 @@
     }
   }
   const play = () => {
+    if (!$currentSong) return;
     if (mutex) {
       instances.forEach((audio) => audio.pause());
     }
@@ -121,15 +130,25 @@
   $: mode = $lrc && $lrc.length > 0 ? "withlrc" : "";
   let lrcActiveIndex = -1;
 
-  $: {
-    player.src; // add as dependency
-    // player will pause everytime when its src change
+  const syncCurrentSong = (song: AplayerAudio | undefined) => {
     lrcActiveIndex = -1;
-    if (!playLock) {
-      play();
+    if (song) {
+      player.src = song.url;
+      if (!playLock) play();
+    } else {
+      player.pause();
+      if (player.hasAttribute("src")) {
+        player.removeAttribute("src");
+        player.load();
+      }
+      $currentTime = 0;
+      $duration = NaN;
+      $wtBufTime = 0;
     }
     playLock = false;
-  }
+  };
+  // Seeking or changing volume must not reload the media source.
+  $: syncCurrentSong($currentSong);
   player.addEventListener("timeupdate", () => {
     $currentTime = player.currentTime;
     if (mode.includes("lrc")) {
@@ -148,12 +167,12 @@
     }
   });
   player.addEventListener("volumechange", () => {
+    muted = player.muted;
     $controlState.volume = player.volume;
   });
   player.addEventListener("loadedmetadata", () => {
     $duration = player.duration;
   });
-  let skipTime;
   player.addEventListener("error", () => {
     console.warn(
       "An audio error has occurred, player will skip forward in 2 seconds."
@@ -181,6 +200,7 @@
   });
   const jumpNext = () => {
     const audios = $audioList;
+    if (audios.length === 0) return;
     const nextIdx = ($playList.playingIndex + 1) % audios.length;
     if ($controlState.loop === "none") {
       if ($controlState.order === "list") {
@@ -213,6 +233,50 @@
     }
   });
 
+  $: seekDuration = Number.isFinite($duration) && $duration > 0 ? $duration : 0;
+  const sliderKeyValue = (
+    event: KeyboardEvent,
+    value: number,
+    max: number,
+    step: number
+  ) => {
+    let next: number;
+    switch (event.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        next = value + step;
+        break;
+      case "ArrowLeft":
+      case "ArrowDown":
+        next = value - step;
+        break;
+      case "Home":
+        next = 0;
+        break;
+      case "End":
+        next = max;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    return Math.min(max, Math.max(0, next));
+  };
+  const seekWithKeyboard = (event: KeyboardEvent) => {
+    const next = sliderKeyValue(event, player.currentTime, seekDuration, 5);
+    if (next !== undefined && seekDuration > 0) {
+      player.currentTime = next;
+      $currentTime = next;
+    }
+  };
+  const changeVolumeWithKeyboard = (event: KeyboardEvent) => {
+    const next = sliderKeyValue(event, player.volume, 1, 0.05);
+    if (next !== undefined) {
+      player.volume = next;
+      player.muted = false;
+    }
+  };
+
   let volumeBar: HTMLElement;
   let playedBar: HTMLElement;
   type DragEventHandler = (event: MouseEvent | TouchEvent) => void;
@@ -242,6 +306,10 @@
     });
   });
   onDestroy(() => {
+    clearTimeout(skipTime);
+    player.pause();
+    const instanceIndex = instances.indexOf(player);
+    if (instanceIndex !== -1) instances.splice(instanceIndex, 1);
     dispatch("destroy");
   });
 </script>
@@ -249,21 +317,26 @@
 <div
   bind:this={rootEl}
   class="aplayer"
+  hidden={!$currentSong}
   class:aplayer-withlrc={$lrc.length > 0}
   class:aplayer-withlist={$audioList.length > 1}
   class:aplayer-narrow={mini}
   class:aplayer-mobile={isMobile}
 >
   <div class="aplayer-body">
-    <div
+    <button
+      type="button"
+      aria-label={paused ? "Play" : "Pause"}
       class="aplayer-pic"
-      style="background-image: url( {$currentSong.cover} )"
+      style:background-image={$currentSong?.cover
+        ? `url("${$currentSong.cover}")`
+        : "none"}
       on:click={() => {
         paused ? play() : player.pause();
       }}
     >
       {#if !paused}
-        <div class="aplayer-button aplayer-pause">
+        <span class="aplayer-button aplayer-pause" aria-hidden="true">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             version="1.1"
@@ -272,9 +345,9 @@
               d="M14.080 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048zM2.88 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048z"
             /></svg
           >
-        </div>
+        </span>
       {:else}
-        <div class="aplayer-button aplayer-play">
+        <span class="aplayer-button aplayer-play" aria-hidden="true">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             version="1.1"
@@ -283,17 +356,17 @@
               d="M15.552 15.168q0.448 0.32 0.448 0.832 0 0.448-0.448 0.768l-13.696 8.512q-0.768 0.512-1.312 0.192t-0.544-1.28v-16.448q0-0.96 0.544-1.28t1.312 0.192z"
             /></svg
           >
-        </div>
+        </span>
       {/if}
-    </div>
+    </button>
 
     <div class="aplayer-info">
       <div class="aplayer-music">
-        <span class="aplayer-title">{$currentSong.name}</span>
-        <span class="aplayer-artist">{$currentSong.artist}</span>
+        <span class="aplayer-title">{$currentSong?.name}</span>
+        <span class="aplayer-artist">{$currentSong?.artist}</span>
       </div>
 
-      {#if $currentSong.lrc}
+      {#if $currentSong?.lrc}
         <div class="aplayer-lrc">
           <div
             class="aplayer-lrc-contents"
@@ -313,6 +386,17 @@
       <div class="aplayer-controller">
         <div
           class="aplayer-bar-wrap"
+          role="slider"
+          tabindex="0"
+          aria-label="Playback position"
+          aria-valuemin={0}
+          aria-valuemax={seekDuration}
+          aria-valuenow={Math.min(seekDuration, Math.max(0, $currentTime))}
+          aria-valuetext={seekDuration
+            ? `${secondToTime($currentTime)} of ${secondToTime(seekDuration)}`
+            : "Not ready"}
+          aria-disabled={seekDuration === 0}
+          on:keydown={seekWithKeyboard}
           bind:this={playedBar}
           on:mousedown={progressDragStart}
           on:mousemove={progressDragMove}
@@ -350,6 +434,8 @@
             <button
               type="button"
               class="aplayer-icon aplayer-icon-volume-down"
+              aria-label="Mute"
+              aria-pressed={muted}
               on:click|capture={() => {
                 player.muted = !player.muted;
               }}
@@ -362,6 +448,15 @@
             </button>
             <div
               class="aplayer-volume-bar-wrap"
+              role="slider"
+              tabindex="0"
+              aria-label="Volume"
+              aria-orientation="vertical"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round($controlState.volume * 100)}
+              aria-valuetext={`${Math.round($controlState.volume * 100)}%${muted ? " (muted)" : ""}`}
+              on:keydown={changeVolumeWithKeyboard}
               on:mousedown={volumeDragStart}
               on:mousemove={volumeDragMove}
               on:mouseup={volumeDragEnd}
@@ -384,6 +479,8 @@
             <button
               type="button"
               class="aplayer-icon aplayer-icon-order"
+              aria-label="Shuffle"
+              aria-pressed={$controlState.order === "random"}
               on:click={() => {
                 $controlState.order =
                   $controlState.order === "list" ? "random" : "list";
@@ -399,6 +496,7 @@
           <button
             type="button"
             class="aplayer-icon aplayer-icon-loop"
+            aria-label={`Repeat: ${$controlState.loop === "all" ? "all tracks" : $controlState.loop === "one" ? "one track" : "off"}. Change repeat mode`}
             on:click={() => {
               if ($controlState.loop === "all") {
                 $controlState.loop = "one";
@@ -422,6 +520,8 @@
             <button
               type="button"
               class="aplayer-icon aplayer-icon-menu"
+              aria-label="Playlist"
+              aria-expanded={$controlState.showList}
               on:click={() => {
                 $controlState.showList = !$controlState.showList;
                 $controlState.showList
@@ -446,23 +546,30 @@
     <!--    <div class="aplayer-miniswitcher" />-->
     <div
       class="aplayer-list"
+      inert={!$controlState.showList}
+      aria-hidden={!$controlState.showList}
       style="height: {$controlState.showList ? `${playerListHeight}px` : '0px'}"
       bind:this={playListElement}
     >
       <ol>
         {#each $audioList as song, idx}
-          <li
-            on:click={() => {
-              $playList.playingIndex = idx;
-              player.currentTime = 0;
-            }}
-          >
-            {#if idx === $playList.playingIndex}
-              <span class="aplayer-list-cur" />
-            {/if}
-            <span class="aplayer-list-index">{idx + 1}</span>
-            <span class="aplayer-list-title">{song.name}</span>
-            <span class="aplayer-list-artist">{song.artist}</span>
+          <li>
+            <button
+              type="button"
+              class="aplayer-track"
+              aria-current={idx === $playList.playingIndex ? "true" : undefined}
+              on:click={() => {
+                $playList.playingIndex = idx;
+                player.currentTime = 0;
+              }}
+            >
+              {#if idx === $playList.playingIndex}
+                <span class="aplayer-list-cur" />
+              {/if}
+              <span class="aplayer-list-index">{idx + 1}</span>
+              <span class="aplayer-list-title">{song.name}</span>
+              <span class="aplayer-list-artist">{song.artist}</span>
+            </button>
           </li>
         {/each}
       </ol>
@@ -471,6 +578,9 @@
 </div>
 
 <style lang="scss">
+  .aplayer[hidden] {
+    display: none;
+  }
   .aplayer {
     --base-font-size: 12px;
     --aplayer-height: calc(var(--base-font-size) * 5.5);
@@ -488,12 +598,12 @@
     border-radius: 2px;
     user-select: none;
     line-height: normal;
-    svg {
+    :global(svg) {
       width: 100%;
       height: 100%;
 
-      path,
-      circle {
+      :global(path),
+      :global(circle) {
         fill: #fff;
       }
     }
@@ -512,9 +622,15 @@
       margin: 0;
       display: inline-block;
 
-      path {
+      :global(path) {
         transition: all 0.2s ease-in-out;
       }
+    }
+
+    button:focus-visible,
+    [role="slider"]:focus-visible {
+      outline: 2px solid #245a92;
+      outline-offset: -2px;
     }
 
     .aplayer-pic {
@@ -530,6 +646,8 @@
       align-items: center;
       transition: all 0.3s ease;
       cursor: pointer;
+      border: 0;
+      padding: 0;
 
       &:hover .aplayer-button {
         opacity: 1;
@@ -547,7 +665,7 @@
       .aplayer-play {
         width: 26px;
         height: 26px;
-        svg {
+        :global(svg) {
           position: absolute;
           top: 3px;
           left: 4px;
@@ -561,7 +679,7 @@
         border: 2px solid #fff;
         bottom: 0;
         right: 4px;
-        svg {
+        :global(svg) {
           position: absolute;
           top: 2px;
           left: 2px;
@@ -604,7 +722,8 @@
           padding: 4px 0;
           cursor: pointer !important;
 
-          &:hover {
+          &:hover,
+          &:focus-visible {
             .aplayer-bar .aplayer-played .aplayer-thumb {
               transform: scale(1);
             }
@@ -651,7 +770,7 @@
         }
         .aplayer-loading-icon {
           //display: none;
-          svg {
+          :global(svg) {
             display: block;
             position: absolute;
             animation: rotate 1s linear infinite;
@@ -672,7 +791,7 @@
           .aplayer-icon {
             cursor: pointer;
             transition: all 0.2s ease;
-            path {
+            :global(path) {
               fill: #666;
             }
           }
@@ -683,7 +802,8 @@
           margin-left: 3px;
           cursor: pointer;
 
-          &:hover .aplayer-volume-bar-wrap {
+          &:hover .aplayer-volume-bar-wrap,
+          &:focus-within .aplayer-volume-bar-wrap {
             height: 40px;
           }
 
@@ -777,13 +897,26 @@
         text-align: left;
         height: calc((var(--base-font-size) + 4px) * 2);
         line-height: 32px;
-        padding: 0 15px;
+        padding: 0;
         font-size: var(--base-font-size);
         border-top: 1px solid #e9e9e9;
         cursor: pointer;
         transition: all 0.2s ease;
         overflow: hidden;
         margin: 0;
+
+        .aplayer-track {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border: 0;
+          padding: 0 15px;
+          text-align: inherit;
+          font: inherit;
+          color: inherit;
+          background: transparent;
+          cursor: pointer;
+        }
 
         &:first-child {
           border-top: none;

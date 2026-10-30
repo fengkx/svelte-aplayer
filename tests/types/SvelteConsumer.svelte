@@ -13,3 +13,7 @@
 
 <Aplayer {audio} />
 <Aplayer audio={[audio]} order="random" loop="one" list_folded={true} />
+
+<Aplayer />
+<Aplayer audio={[]} />
+<Aplayer audio={null} />

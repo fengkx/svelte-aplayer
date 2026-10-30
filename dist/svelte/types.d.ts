@@ -10,7 +10,7 @@ export interface AplayerAudio {
 }
 export type AplayerAudioInput = AplayerAudio | AplayerAudio[];
 export interface AplayerProps {
-    audio: AplayerAudioInput;
+    audio?: AplayerAudioInput | null;
     order?: AplayerOrder;
     loop?: AplayerLoop;
     volume?: number;

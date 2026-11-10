@@ -498,3 +498,130 @@ test("supports folded-list and mini initialization", async ({ page }) => {
   await expect(player.locator(".aplayer-info")).toHaveCSS("display", "none");
   await expect(player.locator(".aplayer-list")).toHaveCSS("display", "none");
 });
+
+for (const build of ["source", "dist"]) {
+  const query = build === "dist" ? "dist&" : "";
+
+  test(`${build}: accepts properties assigned before registration`, async ({
+    page,
+  }) => {
+    await page.goto(`/tests/e2e/fixture.html?${query}property`);
+    await expect(page.locator(".aplayer-title")).toHaveText("First Song");
+    await expect(page.locator(".aplayer-list li")).toHaveCount(3);
+  });
+
+  test(`${build}: waits for audio, clears playback, and accepts new data`, async ({
+    page,
+  }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto(`/tests/e2e/fixture.html?${query}empty`);
+    await expect(page.locator("s-aplayer .aplayer")).toBeAttached();
+    await page.evaluate(async () => {
+      await customElements.whenDefined("s-aplayer");
+    });
+    await expect(page.locator(".aplayer")).toBeAttached();
+    await expect(page.locator(".aplayer")).toBeHidden();
+    await page.evaluate(() => {
+      const { player, replacementTracks } = (window as TestWindow).testHarness;
+      Object.assign(player, { audio: replacementTracks });
+    });
+    await expect(page.locator(".aplayer-title")).toHaveText("Replacement Song");
+    await expect
+      .poll(() =>
+        page.locator(".aplayer-list").evaluate((el) => el.clientHeight)
+      )
+      .toBeGreaterThan(0);
+    await expect
+      .poll(() => page.evaluate(() => window.theAudio.readyState))
+      .toBeGreaterThan(0);
+    await page.locator(".aplayer-pic").click();
+    await expect
+      .poll(() => page.evaluate(() => window.theAudio.paused))
+      .toBe(false);
+    await page.evaluate(() => {
+      Object.assign((window as TestWindow).testHarness.player, { audio: [] });
+    });
+    await expect(page.locator(".aplayer")).toBeHidden();
+    await expect
+      .poll(() =>
+        page.evaluate(() => ({
+          paused: window.theAudio.paused,
+          src: window.theAudio.getAttribute("src"),
+        }))
+      )
+      .toEqual({ paused: true, src: null });
+    await page.evaluate(() => {
+      const { player, replacementTracks } = (window as TestWindow).testHarness;
+      Object.assign(player, { audio: replacementTracks[0] });
+    });
+    await expect(page.locator(".aplayer-title")).toHaveText("Replacement Song");
+    await expect(page.locator(".aplayer")).toBeVisible();
+    await page.evaluate(() =>
+      Object.assign((window as TestWindow).testHarness.player, { audio: null })
+    );
+    await expect(page.locator(".aplayer")).toBeHidden();
+    expect(errors).toEqual([]);
+  });
+
+  test(`${build}: accepts properties before attachment and delayed JSON attributes`, async ({
+    page,
+  }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto(`/tests/e2e/fixture.html?${query}empty`);
+    await expect(page.locator("s-aplayer .aplayer")).toBeAttached();
+    await page.evaluate(async () => {
+      await customElements.whenDefined("s-aplayer");
+      const { replacementTracks } = (window as TestWindow).testHarness;
+      const player = document.createElement("s-aplayer");
+      player.id = "property-player";
+      Object.assign(player, { audio: replacementTracks[0] });
+      document.querySelector("#fixture")!.append(player);
+    });
+    await expect(page.locator("#property-player .aplayer-title")).toHaveText(
+      "Replacement Song"
+    );
+    await page.evaluate(() => {
+      const { player, replacementTracks } = (window as TestWindow).testHarness;
+      player.setAttribute("audio", JSON.stringify(replacementTracks));
+    });
+    await expect(
+      page.locator("s-aplayer").first().locator(".aplayer-title")
+    ).toHaveText("Replacement Song");
+    await page.evaluate(() =>
+      (window as TestWindow).testHarness.player.removeAttribute("audio")
+    );
+    await expect(
+      page.locator("s-aplayer").first().locator(".aplayer")
+    ).toBeHidden();
+    expect(errors).toEqual([]);
+  });
+
+  test(`${build}: resets the index when replacing a shorter playlist`, async ({
+    page,
+  }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto(`/tests/e2e/fixture.html?${query}`);
+    await page.locator(".aplayer-list li").nth(2).click();
+    await page.evaluate(() => {
+      const { player, replacementTracks } = (window as TestWindow).testHarness;
+      Object.assign(player, { audio: replacementTracks });
+    });
+    await expect(page.locator(".aplayer-title")).toHaveText("Replacement Song");
+    await expect(page.locator(".aplayer-list li")).toHaveCount(2);
+    expect(errors).toEqual([]);
+  });
+}
+
+test("stops playback when the element is removed", async ({ page }) => {
+  await page.locator(".aplayer-pic").click();
+  await expect
+    .poll(() => page.evaluate(() => window.theAudio.paused))
+    .toBe(false);
+  await page.evaluate(() => (window as TestWindow).testHarness.player.remove());
+  await expect
+    .poll(() => page.evaluate(() => window.theAudio.paused))
+    .toBe(true);
+});

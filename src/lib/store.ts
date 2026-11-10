@@ -96,7 +96,9 @@ export function createStore(dispatch: DispatchFunc) {
       }
       const lrcSource = $song.lrc;
       if (lrcSource.startsWith("http")) {
-        fetch(lrcSource)
+        const controller = new AbortController();
+        set([]);
+        fetch(lrcSource, { signal: controller.signal })
           .then((resp) => {
             if (!resp.ok) {
               throw new Error(
@@ -106,13 +108,14 @@ export function createStore(dispatch: DispatchFunc) {
             return resp.text();
           })
           .then((text) => {
-            set(parseLrc(text));
+            if (!controller.signal.aborted) set(parseLrc(text));
           })
           .catch((err) => {
+            if (controller.signal.aborted) return;
             set([]);
             console.error(err);
-            throw err;
           });
+        return () => controller.abort();
       } else {
         set(parseLrc(lrcSource));
       }
@@ -122,7 +125,7 @@ export function createStore(dispatch: DispatchFunc) {
 
   let initSong = false;
   currentSong.subscribe((song) => {
-    if (initSong) {
+    if (initSong && song) {
       dispatch("listswitch", song);
     }
     initSong = true;

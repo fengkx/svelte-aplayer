@@ -11,6 +11,11 @@ const audio: AplayerAudio = {
   cover: "https://example.com/cover.jpg",
 };
 
+const emptyProps: AplayerProps = {};
+const clearedProps: AplayerProps = { audio: null };
+void emptyProps;
+void clearedProps;
+
 const singleTrackProps: AplayerProps = { audio };
 const playlistProps: ComponentProps<Aplayer> = {
   audio: [audio],
